@@ -7,11 +7,9 @@ import {
 } from 'react'
 import { type VanPart } from '../data/vanParts'
 
-const TRANSITION_MS = 380
+const TRANSITION_MS = 360
 const SWIPE_THRESHOLD_PX = 56
 const SWIPE_VELOCITY = 0.35
-const DRAG_PARALLAX = 0.38
-const EXIT_NUDGE_PX = 24
 const AXIS_LOCK_PX = 8
 
 type VanPreviewStageProps = {
@@ -59,8 +57,9 @@ function VanLayer({ part, className = '', style }: LayerProps) {
 }
 
 /**
- * Swipe-driven part switcher. Layers fade + nudge inside one frame so
- * intentionally cropped shop art never appears cut in half mid-slide.
+ * Swipe/dot-driven part switcher. Opacity crossfade only — no slide track,
+ * finger-follow, peeks, or translate nudges — so cropped shop art never
+ * shows a cut van mid-transition.
  */
 export function VanPreviewStage({
   parts,
@@ -69,11 +68,8 @@ export function VanPreviewStage({
   swipeDisabled = false,
 }: VanPreviewStageProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
-  const [dragX, setDragX] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const [settleDir, setSettleDir] = useState<0 | -1 | 1>(0)
   const [outgoingPart, setOutgoingPart] = useState<VanPart | null>(null)
-  const [settleActive, setSettleActive] = useState(false)
+  const [fadeActive, setFadeActive] = useState(false)
 
   const pointerStartX = useRef(0)
   const pointerStartY = useRef(0)
@@ -83,13 +79,12 @@ export function VanPreviewStage({
   const velocityX = useRef(0)
   const lockAxis = useRef<'x' | 'y' | null>(null)
   const activeIndexRef = useRef(activeIndex)
-  const dragXRef = useRef(0)
-  const settleTimer = useRef<number | null>(null)
+  const dragDxRef = useRef(0)
+  const fadeTimer = useRef<number | null>(null)
   const pendingCommitRef = useRef<number | null>(null)
   const syncedIndexRef = useRef(activeIndex)
 
   activeIndexRef.current = activeIndex
-  dragXRef.current = dragX
 
   const activePart = parts[activeIndex] ?? parts[0]
 
@@ -103,56 +98,48 @@ export function VanPreviewStage({
 
   useEffect(() => {
     return () => {
-      if (settleTimer.current) window.clearTimeout(settleTimer.current)
+      if (fadeTimer.current) window.clearTimeout(fadeTimer.current)
     }
   }, [])
 
-  const clearSettleTimer = () => {
-    if (settleTimer.current) {
-      window.clearTimeout(settleTimer.current)
-      settleTimer.current = null
+  const clearFadeTimer = () => {
+    if (fadeTimer.current) {
+      window.clearTimeout(fadeTimer.current)
+      fadeTimer.current = null
     }
   }
 
-  const finishSettle = () => {
-    clearSettleTimer()
+  const finishFade = () => {
+    clearFadeTimer()
     setOutgoingPart(null)
-    setSettleDir(0)
-    setSettleActive(false)
-    setDragX(0)
+    setFadeActive(false)
   }
 
-  const runSettleAnimation = () => {
+  const runCrossfade = (fromPart: VanPart) => {
     if (reducedMotion) {
-      finishSettle()
+      finishFade()
       return
     }
-    setSettleActive(false)
+    setOutgoingPart(fromPart)
+    setFadeActive(false)
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => setSettleActive(true))
+      requestAnimationFrame(() => setFadeActive(true))
     })
-    clearSettleTimer()
-    settleTimer.current = window.setTimeout(finishSettle, TRANSITION_MS)
+    clearFadeTimer()
+    fadeTimer.current = window.setTimeout(finishFade, TRANSITION_MS)
   }
 
   const beginTransition = (nextIndex: number, announce: boolean) => {
     const current = activeIndexRef.current
-    if (nextIndex === current || nextIndex < 0 || nextIndex >= parts.length) {
-      setIsDragging(false)
-      setDragX(0)
-      return
-    }
-    const dir = (nextIndex > current ? -1 : 1) as -1 | 1
-    setIsDragging(false)
-    setOutgoingPart(parts[current])
-    setSettleDir(dir)
-    setDragX(0)
+    if (nextIndex === current || nextIndex < 0 || nextIndex >= parts.length) return
+
+    const fromPart = parts[current]
     syncedIndexRef.current = nextIndex
     if (announce) {
       pendingCommitRef.current = nextIndex
       onChangeIndex(nextIndex)
     }
-    runSettleAnimation()
+    if (fromPart) runCrossfade(fromPart)
   }
 
   useEffect(() => {
@@ -166,23 +153,16 @@ export function VanPreviewStage({
     const previous = syncedIndexRef.current
     syncedIndexRef.current = activeIndex
     const fromPart = parts[previous]
-    if (!fromPart || reducedMotion) {
-      finishSettle()
+    if (!fromPart) {
+      finishFade()
       return
     }
-    setOutgoingPart(fromPart)
-    setSettleDir((activeIndex > previous ? -1 : 1) as -1 | 1)
-    setDragX(0)
-    runSettleAnimation()
+    runCrossfade(fromPart)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex, reducedMotion, parts])
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (swipeDisabled || parts.length <= 1) return
-    clearSettleTimer()
-    setOutgoingPart(null)
-    setSettleDir(0)
-    setSettleActive(false)
     pointerId.current = event.pointerId
     pointerStartX.current = event.clientX
     pointerStartY.current = event.clientY
@@ -190,7 +170,7 @@ export function VanPreviewStage({
     lastMoveTime.current = event.timeStamp
     velocityX.current = 0
     lockAxis.current = null
-    setDragX(0)
+    dragDxRef.current = 0
     event.currentTarget.setPointerCapture(event.pointerId)
   }
 
@@ -202,7 +182,6 @@ export function VanPreviewStage({
       if (Math.abs(dx) < AXIS_LOCK_PX && Math.abs(dy) < AXIS_LOCK_PX) return
       lockAxis.current = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y'
       if (lockAxis.current === 'y') return
-      setIsDragging(true)
     }
     if (lockAxis.current !== 'x') return
     event.preventDefault()
@@ -210,10 +189,7 @@ export function VanPreviewStage({
     velocityX.current = (event.clientX - lastMoveX.current) / dt
     lastMoveX.current = event.clientX
     lastMoveTime.current = event.timeStamp
-    const current = activeIndexRef.current
-    const atStart = current <= 0 && dx > 0
-    const atEnd = current >= parts.length - 1 && dx < 0
-    setDragX(atStart || atEnd ? dx * 0.28 : dx)
+    dragDxRef.current = dx
   }
 
   const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -221,11 +197,10 @@ export function VanPreviewStage({
     pointerId.current = null
     if (lockAxis.current !== 'x') {
       lockAxis.current = null
-      setIsDragging(false)
       return
     }
     lockAxis.current = null
-    const dx = dragXRef.current
+    const dx = dragDxRef.current
     const flicked = Math.abs(velocityX.current) > SWIPE_VELOCITY
     const current = activeIndexRef.current
     let next = current
@@ -234,35 +209,21 @@ export function VanPreviewStage({
     } else if (dx >= SWIPE_THRESHOLD_PX || (flicked && velocityX.current > SWIPE_VELOCITY)) {
       next = Math.max(0, current - 1)
     }
-    if (next === current) {
-      setIsDragging(false)
-      setDragX(0)
-      return
-    }
-    beginTransition(next, true)
+    dragDxRef.current = 0
+    if (next !== current) beginTransition(next, true)
   }
 
   const handlePointerCancel = () => {
     pointerId.current = null
     lockAxis.current = null
-    setIsDragging(false)
-    setDragX(0)
+    dragDxRef.current = 0
   }
 
-  const dragProgress = Math.max(-1, Math.min(1, dragX / 140))
-  const peekIndex =
-    dragProgress < -0.04
-      ? Math.min(parts.length - 1, activeIndex + 1)
-      : dragProgress > 0.04
-        ? Math.max(0, activeIndex - 1)
-        : null
-  const peekPart = peekIndex != null && peekIndex !== activeIndex ? parts[peekIndex] : null
-  const peekAmount = Math.abs(dragProgress)
-  const settling = settleDir !== 0 && outgoingPart != null
+  const fading = outgoingPart != null
 
   return (
     <div
-      className={`van-preview-viewport${isDragging ? ' van-preview-viewport--dragging' : ''}`}
+      className="van-preview-viewport"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -271,48 +232,19 @@ export function VanPreviewStage({
       aria-label={`${activePart?.name ?? 'Van part'}. Swipe to browse parts.`}
     >
       <div className="van-preview-stack">
-        {settling && outgoingPart ? (
+        {fading ? (
           <>
             <VanLayer
               part={outgoingPart}
-              className={`van-preview-layer--exit${settleActive ? ' van-preview-layer--exit-active' : ''}`}
-              style={{ '--van-exit-x': `${settleDir * EXIT_NUDGE_PX}px` } as CSSProperties}
+              className={`van-preview-layer--exit${fadeActive ? ' van-preview-layer--exit-active' : ''}`}
             />
             <VanLayer
               part={activePart}
-              className={`van-preview-layer--enter${settleActive ? ' van-preview-layer--enter-active' : ''}`}
-              style={{ '--van-enter-x': `${-settleDir * EXIT_NUDGE_PX}px` } as CSSProperties}
+              className={`van-preview-layer--enter${fadeActive ? ' van-preview-layer--enter-active' : ''}`}
             />
           </>
         ) : (
-          <>
-            {peekPart ? (
-              <VanLayer
-                part={peekPart}
-                style={{
-                  opacity: peekAmount * 0.92,
-                  transform: `translate3d(${
-                    dragX * DRAG_PARALLAX +
-                    (dragProgress < 0 ? EXIT_NUDGE_PX : -EXIT_NUDGE_PX) * (1 - peekAmount)
-                  }px, 0, 0)`,
-                  zIndex: 1,
-                  transition: 'none',
-                }}
-              />
-            ) : null}
-            <VanLayer
-              part={activePart}
-              style={{
-                opacity: peekPart ? 1 - peekAmount * 0.8 : 1,
-                transform: `translate3d(${dragX * DRAG_PARALLAX}px, 0, 0)`,
-                zIndex: 2,
-                transition:
-                  isDragging || reducedMotion
-                    ? 'none'
-                    : `opacity ${TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1), transform ${TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-              }}
-            />
-          </>
+          <VanLayer part={activePart} className="van-preview-layer--current" />
         )}
       </div>
     </div>
