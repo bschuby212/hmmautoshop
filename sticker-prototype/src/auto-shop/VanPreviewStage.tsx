@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { type VanPart } from '../data/vanParts'
 
-const TRANSITION_MS = 360
+const TRANSITION_MS = 350
 const SWIPE_THRESHOLD_PX = 56
 const SWIPE_VELOCITY = 0.35
 const AXIS_LOCK_PX = 8

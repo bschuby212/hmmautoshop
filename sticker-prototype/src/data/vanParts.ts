@@ -71,7 +71,7 @@ export const vanParts: VanPart[] = [
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
     // Tighter rear crop — less van body, more hitch/rack in frame.
-    shopFrame: { widthPercent: 136, leftPercent: 18, topPx: 0 },
+    shopFrame: { widthPercent: 148, leftPercent: 24, topPx: 0 },
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -92,8 +92,8 @@ export const vanParts: VanPart[] = [
     description: 'Headlight decals that give the van a little personality.',
     partSrc: eyelashesPart,
     shopSrc: shopEyelashes,
-    // Front-focused crop; same Y as kayak / bike rack.
-    shopFrame: { widthPercent: 108, leftPercent: -28, topPx: 0 },
+    // Front-focused crop; same Y as kayak / bike rack. Softer left cut.
+    shopFrame: { widthPercent: 106, leftPercent: -22, topPx: 0 },
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },
