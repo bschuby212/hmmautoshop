@@ -178,12 +178,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Pin the van toward the footer — was sitting too high in the bay. */
-  justify-content: flex-end;
+  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer. */
+  justify-content: flex-start;
   align-items: stretch;
   background: transparent;
   margin: 0;
-  padding: 40px 0 0;
+  padding: 148px 0 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
