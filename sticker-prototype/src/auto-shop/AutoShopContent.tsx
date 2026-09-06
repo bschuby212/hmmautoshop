@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { selectionBackground } from '../data/stickers'
 import { vanParts, type VanPart } from '../data/vanParts'
+import garageBackground from '../assets/auto-shop/garage-bg.jpg'
 import { AddToVanButton } from './AddToVanButton'
 import { PartNavigation } from './PartNavigation'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
+
+export { garageBackground }
 
 type AutoShopContentProps = {
   onAddToVan: (part: VanPart) => void
@@ -62,7 +64,7 @@ export function AutoShopContent({
   return (
     <div
       className="auto-shop selection-screen selection-screen--sheet selection-screen--sheet-open"
-      style={{ backgroundImage: `url(${selectionBackground})` }}
+      style={{ backgroundImage: `url(${garageBackground})` }}
     >
       <div className="auto-shop-layout">
         <header className="auto-shop-header">
@@ -82,6 +84,7 @@ export function AutoShopContent({
 
         <PartNavigation
           partName={activePart.name}
+          partDescription={activePart.description}
           positionLabel={`${activePartIndex + 1} of ${total}`}
           onPrevious={handlePrevious}
           onNext={handleNext}

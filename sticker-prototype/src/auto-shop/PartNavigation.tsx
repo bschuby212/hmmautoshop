@@ -1,5 +1,6 @@
 type PartNavigationProps = {
   partName: string
+  partDescription: string
   positionLabel: string
   onPrevious: () => void
   onNext: () => void
@@ -8,6 +9,7 @@ type PartNavigationProps = {
 
 export function PartNavigation({
   partName,
+  partDescription,
   positionLabel,
   onPrevious,
   onNext,
@@ -24,10 +26,9 @@ export function PartNavigation({
       >
         <span aria-hidden="true">‹</span>
       </button>
-      <div className="part-navigation-copy">
-        <p className="part-navigation-name" aria-live="polite">
-          {partName}
-        </p>
+      <div className="part-navigation-copy" aria-live="polite">
+        <p className="part-navigation-name">{partName}</p>
+        <p className="part-navigation-description">{partDescription}</p>
         <p className="part-navigation-position">{positionLabel}</p>
       </div>
       <button

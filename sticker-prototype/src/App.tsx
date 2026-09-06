@@ -15,7 +15,7 @@ import {
   type StickerSet,
 } from './data/stickers'
 import { type VanPart } from './data/vanParts'
-import { AutoShopContent } from './auto-shop/AutoShopContent'
+import { AutoShopContent, garageBackground } from './auto-shop/AutoShopContent'
 import { BeachVanAccessory } from './auto-shop/VanPreviewStage'
 import { saveEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
@@ -1387,8 +1387,8 @@ function App() {
                 />
               ) : (
                 <div
-                  className={`selection-screen selection-screen--sheet${sheetOpen ? ' selection-screen--sheet-open' : ''}`}
-                  style={{ backgroundImage: `url(${selectionBackground})` }}
+                  className={`selection-screen selection-screen--sheet${sheetOpen ? ' selection-screen--sheet-open' : ''} auto-shop-sheet-placeholder`}
+                  style={{ backgroundImage: `url(${garageBackground})` }}
                   aria-hidden
                 />
               )
