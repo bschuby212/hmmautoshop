@@ -71,7 +71,7 @@ export const vanParts: VanPart[] = [
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
     // Tighter rear crop — less van body, more hitch/rack in frame.
-    shopFrame: { widthPercent: 148, leftPercent: 24, topPx: 0 },
+    shopFrame: { widthPercent: 170, leftPercent: 32, topPx: 0 },
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
