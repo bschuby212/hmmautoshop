@@ -178,13 +178,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer.
-   * Offset accounts for layout clearing the sign at top 65 (159px pad). */
+  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer. */
   justify-content: flex-start;
   align-items: stretch;
   background: transparent;
   margin: 0;
-  padding: 111px 0 0;
+  padding: 148px 0 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
@@ -361,7 +360,7 @@
   gap: 12px;
   flex-shrink: 0;
   text-align: center;
-  /* Clear gap between description and Add to Van. */
+  /* ~40px clear gap between description and Add to Van. */
   margin-bottom: 24px;
   opacity: 0;
   transform: translate3d(0, 6px, 0);
@@ -402,8 +401,8 @@
   flex-direction: column;
   gap: 16px;
   flex-shrink: 0;
-  /* Extra air under the description. */
-  margin-top: 8px;
+  /* ~40px clear gap under the description (with part-navigation margin). */
+  margin-top: 0;
   padding-top: 16px;
 }
 
