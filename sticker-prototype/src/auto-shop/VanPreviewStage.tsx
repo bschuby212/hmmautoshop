@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { type VanPart } from '../data/vanParts'
 
-const TRANSITION_MS = 280
+const TRANSITION_MS = 480
 const SWIPE_THRESHOLD_PX = 56
 const SWIPE_VELOCITY = 0.35
 const AXIS_LOCK_PX = 8
@@ -56,8 +56,8 @@ function VanLayer({ part, className = '' }: LayerProps) {
 }
 
 /**
- * Swipe/dot part switcher. Current van stays fully opaque underneath;
- * outgoing layer fades out on top — never leaves the active van stuck at 0.
+ * Swipe/dot part switcher. Dual-layer crossfade: incoming fades in while
+ * outgoing fades out. After the dissolve, only the opaque --current layer remains.
  */
 export function VanPreviewStage({
   parts,
@@ -67,7 +67,7 @@ export function VanPreviewStage({
 }: VanPreviewStageProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [outgoingPart, setOutgoingPart] = useState<VanPart | null>(null)
-  const [exitActive, setExitActive] = useState(false)
+  const [fadeActive, setFadeActive] = useState(false)
 
   const pointerStartX = useRef(0)
   const pointerStartY = useRef(0)
@@ -85,6 +85,7 @@ export function VanPreviewStage({
   activeIndexRef.current = activeIndex
 
   const activePart = parts[activeIndex] ?? parts[0]
+  const isCrossfading = outgoingPart !== null
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -110,7 +111,7 @@ export function VanPreviewStage({
   const finishFade = () => {
     clearFadeTimer()
     setOutgoingPart(null)
-    setExitActive(false)
+    setFadeActive(false)
   }
 
   const runCrossfade = (fromPart: VanPart) => {
@@ -120,9 +121,9 @@ export function VanPreviewStage({
     }
     clearFadeTimer()
     setOutgoingPart(fromPart)
-    setExitActive(false)
+    setFadeActive(false)
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => setExitActive(true))
+      requestAnimationFrame(() => setFadeActive(true))
     })
     fadeTimer.current = window.setTimeout(finishFade, TRANSITION_MS)
   }
@@ -228,14 +229,20 @@ export function VanPreviewStage({
       aria-label={`${activePart?.name ?? 'Van part'}. Swipe to browse parts.`}
     >
       <div className="van-preview-stack">
-        {/* Current always fully opaque underneath — never stuck faded. */}
-        <VanLayer part={activePart} className="van-preview-layer--current" />
-        {outgoingPart ? (
-          <VanLayer
-            part={outgoingPart}
-            className={`van-preview-layer--exit${exitActive ? ' van-preview-layer--exit-active' : ''}`}
-          />
-        ) : null}
+        {isCrossfading && outgoingPart ? (
+          <>
+            <VanLayer
+              part={activePart}
+              className={`van-preview-layer--enter${fadeActive ? ' van-preview-layer--enter-active' : ''}`}
+            />
+            <VanLayer
+              part={outgoingPart}
+              className={`van-preview-layer--exit${fadeActive ? ' van-preview-layer--exit-active' : ''}`}
+            />
+          </>
+        ) : (
+          <VanLayer part={activePart} className="van-preview-layer--current" />
+        )}
       </div>
     </div>
   )

@@ -25,10 +25,11 @@ export function PartNavigation({ partName, partDescription, partId }: PartNaviga
     }
 
     setVisible(false)
+    // Half of van crossfade (480ms): fade out, swap copy, fade in.
     const swapTimer = window.setTimeout(() => {
       setRendered({ partName, partDescription, partId })
       requestAnimationFrame(() => setVisible(true))
-    }, 120)
+    }, 240)
     return () => window.clearTimeout(swapTimer)
   }, [partId, partName, partDescription, rendered.partId])
 
