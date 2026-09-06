@@ -74,7 +74,13 @@ export function AutoShopContent({
           </div>
         </header>
 
-        <VanPreviewStage part={activePart} transitioning={isTransitioning} />
+        <VanPreviewStage
+          part={activePart}
+          transitioning={isTransitioning}
+          onSwipePrevious={handlePrevious}
+          onSwipeNext={handleNext}
+          swipeDisabled={isConfirming}
+        />
 
         <div className="auto-shop-footer">
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
@@ -82,10 +88,6 @@ export function AutoShopContent({
             <PartNavigation
               partName={activePart.name}
               partDescription={activePart.description}
-              positionLabel={`${activePartIndex + 1} of ${total}`}
-              onPrevious={handlePrevious}
-              onNext={handleNext}
-              disabled={isConfirming}
             />
 
             <div className="auto-shop-actions">
@@ -100,7 +102,7 @@ export function AutoShopContent({
                 onClick={onClose}
                 disabled={isConfirming}
               >
-                Save for later
+                Save for Later
               </button>
             </div>
           </div>
