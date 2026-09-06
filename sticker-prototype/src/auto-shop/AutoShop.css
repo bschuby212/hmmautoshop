@@ -178,12 +178,13 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer. */
+  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer.
+   * Offset for layout clearing the sign at top 65 (159px pad): 148 - 37 = 111. */
   justify-content: flex-start;
   align-items: stretch;
   background: transparent;
   margin: 0;
-  padding: 148px 0 0;
+  padding: 111px 0 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
