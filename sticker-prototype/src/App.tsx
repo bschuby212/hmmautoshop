@@ -1246,7 +1246,7 @@ function App() {
 
     sheet.addEventListener('transitionend', onTransitionEnd)
     // Fallback if transitionend is skipped (e.g. reduced motion / already open).
-    const fallbackTimer = window.setTimeout(markReady, 750)
+    const fallbackTimer = window.setTimeout(markReady, 900)
 
     return () => {
       sheet.removeEventListener('transitionend', onTransitionEnd)

@@ -29,7 +29,7 @@ function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperti
     transformOrigin: camera.transformOrigin ?? '50% 50%',
     transition: reducedMotion
       ? 'none'
-      : `transform ${duration}ms cubic-bezier(0.22, 0.8, 0.28, 1)`,
+      : `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`,
   }
 }
 
