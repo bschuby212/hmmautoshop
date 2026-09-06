@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { vanParts, type VanPart } from '../data/vanParts'
 import garageBackground from '../assets/auto-shop/garage-bg.jpg'
+import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { AddToVanButton } from './AddToVanButton'
 import { PartNavigation } from './PartNavigation'
 import { VanPreviewStage } from './VanPreviewStage'
@@ -68,7 +69,9 @@ export function AutoShopContent({
     >
       <div className="auto-shop-layout">
         <header className="auto-shop-header">
-          <h1 className="auto-shop-title">Auto Shop</h1>
+          <div className="auto-shop-sign">
+            <img src={autoShopSign} alt="Auto Shop" draggable={false} />
+          </div>
           <button
             type="button"
             className="auto-shop-close"
