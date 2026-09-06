@@ -70,11 +70,11 @@
 }
 
 .auto-shop-sign {
-  width: min(280px, 82%);
+  width: min(300px, 86%);
   pointer-events: none;
   display: grid;
   place-items: center;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.28));
 }
 
 .auto-shop-sign img {
@@ -86,73 +86,38 @@
   -webkit-user-drag: none;
 }
 
-.auto-shop-close {
-  position: absolute;
-  right: 16px;
-  top: 8px;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.82);
-  color: #063235;
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  z-index: 2;
-}
-
-.auto-shop-close:hover {
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.auto-shop-close:focus-visible {
-  outline: 2px solid #7960d9;
-  outline-offset: 2px;
-}
-
-.auto-shop-close:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
 .van-preview-viewport {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 360px;
   flex: 1 1 auto;
-  min-height: 280px;
+  min-height: 260px;
   max-height: none;
   overflow: visible;
   display: grid;
-  place-items: end center;
-  align-content: end;
+  place-items: center;
+  align-content: center;
   background: transparent;
-  margin-top: 0;
-  margin-bottom: -40px;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 0 8px;
   z-index: 1;
 }
 
 .van-preview-stage {
-  /* Full van, grounded to the garage lift bay. */
-  width: 176%;
+  /* Full van centered in the sheet — not cropped or over-zoomed. */
+  width: 100%;
+  max-width: 340px;
   will-change: transform;
-  filter: drop-shadow(0 8px 12px rgba(28, 20, 8, 0.28));
+  filter: drop-shadow(0 10px 16px rgba(28, 20, 8, 0.28));
   backface-visibility: hidden;
   transform: translateZ(0);
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .van-preview-scene {
   position: relative;
   width: 100%;
   aspect-ratio: 928 / 944;
-  /* Pull tires down through the transparent pad in the van art. */
-  margin-bottom: -24%;
 }
 
 .van-preview-base,
@@ -393,19 +358,17 @@
   min-height: 48px;
   height: 48px;
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.78);
-  background: rgba(255, 255, 255, 0.12);
-  color: #f7f4ee;
+  border: 2px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: -0.2px;
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .auto-shop-save-for-later:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .auto-shop-save-for-later:focus-visible {
