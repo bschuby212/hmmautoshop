@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { vanParts, type VanPart } from '../data/vanParts'
 import garageBackground from '../assets/auto-shop/garage-bg.jpg'
+import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { AddToVanButton } from './AddToVanButton'
 import { PartNavigation } from './PartNavigation'
-import { PartPicker } from './PartPicker'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
 
@@ -67,10 +67,15 @@ export function AutoShopContent({
       className="auto-shop selection-screen selection-screen--sheet selection-screen--sheet-open"
       style={{ backgroundImage: `url(${garageBackground})` }}
     >
-      <div className="auto-shop-layout">
-        {/* Sign is painted onto the garage beam — keep empty space so it stays visible. */}
-        <div className="auto-shop-sign-space" aria-hidden="true" />
+      {/* Figma 17545:4167 + 17545:4168 — metal plate overlay + title, not baked into garage. */}
+      <header className="auto-shop-sign" aria-label="Auto Shop">
+        <div className="auto-shop-sign-plate" aria-hidden="true">
+          <img src={autoShopSign} alt="" draggable={false} />
+        </div>
+        <h1 className="auto-shop-sign-title">Auto Shop</h1>
+      </header>
 
+      <div className="auto-shop-layout">
         <VanPreviewStage
           part={activePart}
           transitioning={isTransitioning}
@@ -82,13 +87,6 @@ export function AutoShopContent({
         <div className="auto-shop-footer">
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
-            <PartPicker
-              parts={vanParts}
-              activePartId={activePart.id}
-              onSelect={goToIndex}
-              disabled={isConfirming}
-            />
-
             <PartNavigation
               partName={activePart.name}
               partDescription={activePart.description}
