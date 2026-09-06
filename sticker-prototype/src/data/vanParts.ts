@@ -1,3 +1,6 @@
+import bikeRackPart from '../assets/auto-shop/parts/bike-rack.png'
+import kayakPart from '../assets/auto-shop/parts/kayak.png'
+import eyelashesPart from '../assets/auto-shop/parts/eyelashes.png'
 import baseVan from '../assets/auto-shop/van/base-van.png'
 import bikeRackVan from '../assets/auto-shop/van/bike-rack.png'
 import kayakVan from '../assets/auto-shop/van/kayak.png'
@@ -13,14 +16,16 @@ export type VanPartCamera = {
 }
 
 /**
- * Each part is a full composited side-view van (van + accessory already attached).
- * Swiping crossfades the whole image — no overlay placement or zoom.
+ * Each catalog entry has an isolated part product shot plus a full van composite.
+ * The product shot is what you browse; the composite shows it equipped.
  */
 export type VanPart = {
   id: string
   name: string
   description: string
-  /** Full van + part composite shown in Auto Shop and on the beach drive-off. */
+  /** Isolated part art for the product tray / hero. */
+  partSrc: string
+  /** Full van + part composite for equipped preview and beach drive-off. */
   vanSrc: string
   camera: VanPartCamera
 }
@@ -41,6 +46,7 @@ export const vanParts: VanPart[] = [
     id: 'bike-rack',
     name: 'Bike rack',
     description: 'Rear hitch mount that carries two bikes for the trail.',
+    partSrc: bikeRackPart,
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -48,6 +54,7 @@ export const vanParts: VanPart[] = [
     id: 'kayak',
     name: 'Kayak',
     description: 'A red kayak strapped to the roof for water days.',
+    partSrc: kayakPart,
     vanSrc: kayakVan,
     camera: stillCamera,
   },
@@ -55,6 +62,7 @@ export const vanParts: VanPart[] = [
     id: 'eyelashes',
     name: 'Eyelashes',
     description: 'Playful lash decals that give the headlights some charm.',
+    partSrc: eyelashesPart,
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },

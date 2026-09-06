@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { vanParts, type VanPart } from '../data/vanParts'
 import garageBackground from '../assets/auto-shop/garage-bg.jpg'
-import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { AddToVanButton } from './AddToVanButton'
 import { PartNavigation } from './PartNavigation'
+import { PartPicker } from './PartPicker'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
 
@@ -68,11 +68,8 @@ export function AutoShopContent({
       style={{ backgroundImage: `url(${garageBackground})` }}
     >
       <div className="auto-shop-layout">
-        <header className="auto-shop-header">
-          <div className="auto-shop-sign">
-            <img src={autoShopSign} alt="Auto Shop" draggable={false} />
-          </div>
-        </header>
+        {/* Sign is painted onto the garage beam — keep empty space so it stays visible. */}
+        <div className="auto-shop-sign-space" aria-hidden="true" />
 
         <VanPreviewStage
           part={activePart}
@@ -85,6 +82,13 @@ export function AutoShopContent({
         <div className="auto-shop-footer">
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
+            <PartPicker
+              parts={vanParts}
+              activePartId={activePart.id}
+              onSelect={goToIndex}
+              disabled={isConfirming}
+            />
+
             <PartNavigation
               partName={activePart.name}
               partDescription={activePart.description}
