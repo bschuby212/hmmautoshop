@@ -68,9 +68,9 @@ export const vanParts: VanPart[] = [
     name: 'Bike rack',
     description: 'Rear hitch mount that carries two bikes for the trail.',
     imageSrc: bikeRack,
-    accessory: { width: '15%', x: '5.5%', y: '45.5%', anchor: 'top left' },
+    accessory: { width: '15%', x: '6.2%', y: '45.2%', anchor: 'top left' },
     camera: { scale: 1.04, x: 16, y: 2, transformOrigin: '22% 55%', duration: 500 },
-    beachPlacement: { width: '16%', x: '4%', y: '30%', anchor: 'top left' },
+    beachPlacement: { width: '16%', x: '5%', y: '30%', anchor: 'top left' },
   },
   {
     id: 'solar-panels',
