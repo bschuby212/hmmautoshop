@@ -1,22 +1,40 @@
 .auto-shop {
   color: #063235;
   background-color: #c4b49a;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
+  background-image: none;
   position: relative;
+  overflow: hidden;
 }
 
-/* Beat .selection-screen center-top so the lift rails stay in frame. */
+/* Beat .selection-screen cover so Figma framing wins. */
 .auto-shop.selection-screen {
-  background-size: cover;
-  background-position: center top;
+  background-image: none;
+  background-size: auto;
+  background-position: initial;
+}
+
+/*
+ * Figma 17545:4192 on a 393×852 phone:
+ * left -22 / top -196 / width 485 / height 1048 — zoomed-in garage.
+ */
+.auto-shop-garage-bg {
+  position: absolute;
+  z-index: 0;
+  left: -22px;
+  top: -196px;
+  width: 485px;
+  height: 1048px;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .auto-shop-sheet-placeholder {
   background-color: #c4b49a;
-  background-size: cover;
-  background-position: center top;
+  background-size: 485px 1048px;
+  background-position: -22px -196px;
   background-repeat: no-repeat;
 }
 
@@ -83,6 +101,7 @@
   padding: 159px 0 0;
   gap: 0;
   position: relative;
+  z-index: 1;
 }
 
 .auto-shop-stage {

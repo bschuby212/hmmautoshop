@@ -64,10 +64,16 @@ export function AutoShopContent({
   }
 
   return (
-    <div
-      className="auto-shop selection-screen selection-screen--sheet selection-screen--sheet-open"
-      style={{ backgroundImage: `url(${garageBackground})` }}
-    >
+    <div className="auto-shop selection-screen selection-screen--sheet selection-screen--sheet-open">
+      {/* Figma 17545:4192 — garage bg scaled larger than the phone (485×1048 at -22,-196). */}
+      <img
+        className="auto-shop-garage-bg"
+        src={garageBackground}
+        alt=""
+        draggable={false}
+        aria-hidden="true"
+      />
+
       {/* Figma 17545:4167 + 17545:4168 — metal plate overlay + title, not baked into garage. */}
       <header className="auto-shop-sign" aria-label="Auto Shop">
         <div className="auto-shop-sign-plate" aria-hidden="true">
