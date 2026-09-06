@@ -453,11 +453,7 @@
     animation: none !important;
   }
 
-  .van-preview-layer,
-  .van-preview-layer--exit,
-  .van-preview-layer--exit-active,
-  .van-preview-layer--enter,
-  .van-preview-layer--enter-active,
+  .van-preview-track,
   .van-preview-stage,
   .part-navigation {
     transition: none !important;
