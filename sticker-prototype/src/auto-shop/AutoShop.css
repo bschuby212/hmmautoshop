@@ -38,12 +38,12 @@
   background-repeat: no-repeat;
 }
 
-/* Figma 17545:4167 — rusty metal plate overlay (393 phone frame). */
+/* Sit tighter under the garage windows (zoomed Figma bg). */
 .auto-shop-sign {
   position: absolute;
   z-index: 3;
   left: 22px;
-  top: 65px;
+  top: 28px;
   width: 351px;
   height: 94px;
   margin: 0;
@@ -97,8 +97,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Clear the absolute sign (top 65 + height 94). */
-  padding: 159px 0 0;
+  /* Clear the absolute sign (top 28 + height 94). */
+  padding: 122px 0 0;
   gap: 0;
   position: relative;
   z-index: 1;
