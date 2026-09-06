@@ -174,13 +174,16 @@
   width: 100%;
   max-width: 393px;
   flex: 1 1 auto;
-  min-height: 260px;
+  min-height: 300px;
   overflow: hidden;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  /* Pin the van toward the footer — was sitting too high in the bay. */
+  justify-content: flex-end;
+  align-items: stretch;
   background: transparent;
   margin: 0;
-  /* Nudge the van stage down ~12px in the sheet. */
-  padding: 12px 0 0;
+  padding: 56px 0 4px;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
@@ -198,22 +201,51 @@
   cursor: grabbing;
 }
 
-.van-preview-track {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 248px;
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.van-preview-slide {
+.van-preview-stack {
   position: relative;
-  flex: 0 0 100%;
   width: 100%;
   height: 248px;
   flex-shrink: 0;
+}
+
+.van-preview-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.van-preview-layer--exit {
+  z-index: 1;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: none;
+}
+
+.van-preview-layer--exit-active {
+  opacity: 0;
+  transform: translate3d(var(--van-exit-x, -24px), 0, 0);
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.van-preview-layer--enter {
+  z-index: 2;
+  opacity: 0;
+  transform: translate3d(var(--van-enter-x, 24px), 0, 0);
+  transition: none;
+}
+
+.van-preview-layer--enter-active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .van-preview-stage {
@@ -328,8 +360,8 @@
   gap: 12px;
   flex-shrink: 0;
   text-align: center;
-  /* 8px between copy and Add to Van. */
-  margin-bottom: 8px;
+  /* Clear gap between description and Add to Van. */
+  margin-bottom: 16px;
   opacity: 0;
   transform: translate3d(0, 6px, 0);
   transition:
@@ -449,7 +481,11 @@
     animation: none !important;
   }
 
-  .van-preview-track,
+  .van-preview-layer,
+  .van-preview-layer--exit,
+  .van-preview-layer--exit-active,
+  .van-preview-layer--enter,
+  .van-preview-layer--enter-active,
   .van-preview-stage,
   .part-navigation {
     transition: none !important;
