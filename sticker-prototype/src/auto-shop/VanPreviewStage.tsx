@@ -19,9 +19,8 @@ function placementStyle(placement: VanPartPlacement): CSSProperties {
   }
 }
 
-/** Seat the painted van on the garage lift rails.
- *  Base van art has ~23.5% transparent pad under the tires. */
-const BASE_FRAME_Y = 118
+/** Keep the full van centered; cameras only nudge gently on swipe. */
+const BASE_FRAME_Y = 0
 
 function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperties {
   const duration = reducedMotion ? 1 : (camera.duration ?? 420)

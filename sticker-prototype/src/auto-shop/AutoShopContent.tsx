@@ -72,15 +72,6 @@ export function AutoShopContent({
           <div className="auto-shop-sign">
             <img src={autoShopSign} alt="Auto Shop" draggable={false} />
           </div>
-          <button
-            type="button"
-            className="auto-shop-close"
-            aria-label="Close Auto Shop"
-            onClick={onClose}
-            disabled={isConfirming}
-          >
-            <span aria-hidden="true">×</span>
-          </button>
         </header>
 
         <VanPreviewStage part={activePart} transitioning={isTransitioning} />
