@@ -153,11 +153,6 @@
   }
 }
 
-.van-preview-viewport {
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 120ms;
-}
-
 .auto-shop-footer {
   animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 220ms;
@@ -174,7 +169,6 @@
   }
 }
 
-
 .van-preview-viewport {
   position: relative;
   width: 100%;
@@ -182,9 +176,7 @@
   flex: 1 1 auto;
   min-height: 260px;
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  align-content: center;
+  display: block;
   background: transparent;
   margin: 0;
   /* Nudge the van stage down ~12px in the sheet. */
@@ -193,10 +185,35 @@
   touch-action: pan-y;
   cursor: grab;
   user-select: none;
+  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 120ms;
+}
+
+.van-preview-viewport--dragging {
+  cursor: grabbing;
+  touch-action: none;
 }
 
 .van-preview-viewport:active {
   cursor: grabbing;
+}
+
+.van-preview-track {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 248px;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.van-preview-slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 248px;
+  flex-shrink: 0;
 }
 
 .van-preview-stage {
@@ -205,7 +222,6 @@
   width: 100%;
   max-width: none;
   height: 248px;
-  will-change: transform;
   filter: drop-shadow(0 10px 16px rgba(28, 20, 8, 0.28));
   backface-visibility: hidden;
   transform: translateZ(0);
@@ -230,46 +246,6 @@
   backface-visibility: hidden;
   opacity: 1;
   /* width / left / top come from Figma shopFrame inline styles */
-}
-
-.van-preview-van--incoming {
-  z-index: 1;
-}
-
-.van-preview-van--outgoing {
-  z-index: 2;
-}
-
-.van-preview-van--fade-in {
-  animation: auto-shop-van-fade-in 480ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-.van-preview-van--fade-out {
-  animation: auto-shop-van-fade-out 480ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-.van-preview-van--instant,
-.van-preview-van--instant.van-preview-van--fade-in,
-.van-preview-van--instant.van-preview-van--fade-out {
-  animation: none;
-}
-
-@keyframes auto-shop-van-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes auto-shop-van-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
 }
 
 .auto-shop-footer {
@@ -354,6 +330,16 @@
   text-align: center;
   /* 8px between copy and Add to Van. */
   margin-bottom: 8px;
+  opacity: 0;
+  transform: translate3d(0, 6px, 0);
+  transition:
+    opacity 220ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.part-navigation--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 .part-navigation-name {
@@ -458,11 +444,14 @@
 @media (prefers-reduced-motion: reduce) {
   .auto-shop-stage,
   .auto-shop-part-hero,
-  .auto-shop-footer {
+  .auto-shop-footer,
+  .van-preview-viewport {
     animation: none !important;
   }
 
-  .van-preview-stage {
+  .van-preview-track,
+  .van-preview-stage,
+  .part-navigation {
     transition: none !important;
   }
 

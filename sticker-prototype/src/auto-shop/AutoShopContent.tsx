@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { vanParts, type VanPart } from '../data/vanParts'
 import garageBackground from '../assets/auto-shop/garage-bg.jpg'
 import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
@@ -22,41 +22,15 @@ export function AutoShopContent({
   isConfirming = false,
 }: AutoShopContentProps) {
   const [activePartIndex, setActivePartIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const transitionTimer = useRef<number | null>(null)
   const total = vanParts.length
   const activePart = vanParts[activePartIndex] ?? vanParts[0]
-
-  useEffect(() => {
-    return () => {
-      if (transitionTimer.current) window.clearTimeout(transitionTimer.current)
-    }
-  }, [])
 
   const goToIndex = (nextIndex: number) => {
     if (isConfirming || total === 0) return
     const wrapped = ((nextIndex % total) + total) % total
     if (wrapped === activePartIndex) return
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (transitionTimer.current) window.clearTimeout(transitionTimer.current)
-
     setActivePartIndex(wrapped)
-    if (reducedMotion) {
-      setIsTransitioning(false)
-      return
-    }
-
-    setIsTransitioning(true)
-    const duration = vanParts[wrapped]?.camera.duration ?? 480
-    transitionTimer.current = window.setTimeout(() => {
-      setIsTransitioning(false)
-      transitionTimer.current = null
-    }, duration)
   }
-
-  const handlePrevious = () => goToIndex(activePartIndex - 1)
-  const handleNext = () => goToIndex(activePartIndex + 1)
 
   const handleAdd = () => {
     if (isConfirming) return
@@ -84,10 +58,9 @@ export function AutoShopContent({
 
       <div className="auto-shop-layout">
         <VanPreviewStage
-          part={activePart}
-          transitioning={isTransitioning}
-          onSwipePrevious={handlePrevious}
-          onSwipeNext={handleNext}
+          parts={vanParts}
+          activeIndex={activePartIndex}
+          onChangeIndex={goToIndex}
           swipeDisabled={isConfirming}
         />
 
@@ -104,6 +77,7 @@ export function AutoShopContent({
             <PartNavigation
               partName={activePart.name}
               partDescription={activePart.description}
+              partId={activePart.id}
             />
 
             <div className="auto-shop-actions">
