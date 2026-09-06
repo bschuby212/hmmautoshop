@@ -460,14 +460,14 @@
   -webkit-user-drag: none;
   image-rendering: auto;
 }
-/* Hit target over the Sticker Stand / awning near MAP_VAN_PATH end (~119, 340). */
+/* Hit target over the Auto Shop near MAP_VAN_PATH end (~119, 340). */
 .map-stand-hit {
   position: absolute;
   z-index: 4;
-  left: 78px;
-  top: 268px;
-  width: 130px;
-  height: 120px;
+  left: 168px;
+  top: 300px;
+  width: 150px;
+  height: 140px;
   margin: 0;
   padding: 0;
   border: 0;

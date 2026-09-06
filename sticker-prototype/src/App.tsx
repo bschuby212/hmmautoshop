@@ -92,7 +92,7 @@ function stickerPositionToDriveOffPercent(position: StickerPosition) {
   }
 }
 
-/** Phone-space waypoints along the road from the yellow star to the grey stand star. */
+/** Phone-space waypoints along the road from the yellow star to the Auto Shop grey star. */
 const MAP_VAN_PATH = [
   { x: 302, y: 695 },
   { x: 298, y: 636 },
