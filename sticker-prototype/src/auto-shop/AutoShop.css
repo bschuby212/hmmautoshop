@@ -43,7 +43,7 @@
   position: absolute;
   z-index: 3;
   left: 22px;
-  top: 49px; /* was 65; nudged up 16px */
+  top: 33px; /* was 65; nudged up 32px total */
   width: 351px;
   height: 77px; /* 351 × (90/409) — keep plate aspect so holes aren’t cropped */
   margin: 0;
