@@ -19,12 +19,13 @@ export type VanPartCamera = {
 }
 
 /**
- * How the shop preview image is framed in the phone (Figma crop per part).
- * Width/left are % of the 393px frame; top nudges vertical seating on the lift.
+ * Figma shop crop on a 393px phone — absolute px, not % of a padded parent.
+ * Image fills the box with object-fit: cover.
  */
 export type VanPartShopFrame = {
-  widthPercent: number
-  leftPercent: number
+  widthPx: number
+  leftPx: number
+  heightPx: number
   topPx?: number
 }
 
@@ -40,7 +41,7 @@ export type VanPart = {
   partSrc: string
   /** Auto Shop swipe preview (Figma angle/crop art). */
   shopSrc: string
-  /** Framing for shopSrc inside the phone viewport. */
+  /** Framing for shopSrc inside the 393px phone stage. */
   shopFrame: VanPartShopFrame
   /** Full van + part composite for equipped beach drive-off. */
   vanSrc: string
@@ -59,9 +60,11 @@ const stillCamera: VanPartCamera = {
 }
 
 /**
- * Order matches Figma 17547:4065 carousel: bike rack → kayak → eyelashes.
- * All parts share topPx: 0 so previews sit on the same Y axis.
- * Width/left crop each accessory; bike rack is tighter / more rear-focused.
+ * Exact Figma 17547:4065 boxes (phone 393px):
+ * - bike rack: left 63 / top 280 / 547×248
+ * - kayak:     left 25 / top 336 / 341×198
+ * - eyelashes: left -174 / top 296 / 495×248
+ * topPx is relative to the bike-rack baseline (280).
  */
 export const vanParts: VanPart[] = [
   {
@@ -70,8 +73,7 @@ export const vanParts: VanPart[] = [
     description: 'Rear hitch mount that carries two bikes for the trail.',
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
-    // Tighter rear crop — less van body, more hitch/rack in frame.
-    shopFrame: { widthPercent: 170, leftPercent: 32, topPx: 0 },
+    shopFrame: { widthPx: 547, leftPx: 63, heightPx: 248, topPx: 0 },
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -81,8 +83,7 @@ export const vanParts: VanPart[] = [
     description: 'Roof straps that lock a kayak on for water days.',
     partSrc: kayakPart,
     shopSrc: shopKayak,
-    // Side profile, scaled to match the other parts’ visual size.
-    shopFrame: { widthPercent: 100, leftPercent: 0, topPx: 0 },
+    shopFrame: { widthPx: 341, leftPx: 25, heightPx: 198, topPx: 56 },
     vanSrc: kayakVan,
     camera: stillCamera,
   },
@@ -92,8 +93,7 @@ export const vanParts: VanPart[] = [
     description: 'Headlight decals that give the van a little personality.',
     partSrc: eyelashesPart,
     shopSrc: shopEyelashes,
-    // Front-focused crop; same Y as kayak / bike rack. Softer left cut.
-    shopFrame: { widthPercent: 106, leftPercent: -22, topPx: 0 },
+    shopFrame: { widthPx: 495, leftPx: -174, heightPx: 248, topPx: 16 },
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },

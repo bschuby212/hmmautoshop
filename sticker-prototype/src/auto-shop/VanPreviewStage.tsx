@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { type VanPart } from '../data/vanParts'
 
-const TRANSITION_MS = 350
+const TRANSITION_MS = 280
 const SWIPE_THRESHOLD_PX = 56
 const SWIPE_VELOCITY = 0.35
 const AXIS_LOCK_PX = 8
@@ -20,27 +20,26 @@ type VanPreviewStageProps = {
 }
 
 function shopImageStyle(part: VanPart): CSSProperties {
-  const frame = part.shopFrame ?? { widthPercent: 100, leftPercent: 0, topPx: 0 }
-  const { widthPercent, leftPercent, topPx = 0 } = frame
+  const frame = part.shopFrame
   return {
-    width: `${widthPercent}%`,
-    maxWidth: 'none',
-    left: `${leftPercent}%`,
-    top: topPx,
-    height: 'auto',
     position: 'absolute',
+    width: frame.widthPx,
+    height: frame.heightPx,
+    left: frame.leftPx,
+    top: frame.topPx ?? 0,
+    maxWidth: 'none',
+    objectFit: 'cover',
   }
 }
 
 type LayerProps = {
   part: VanPart
   className?: string
-  style?: CSSProperties
 }
 
-function VanLayer({ part, className = '', style }: LayerProps) {
+function VanLayer({ part, className = '' }: LayerProps) {
   return (
-    <div className={`van-preview-layer ${className}`.trim()} style={style} aria-hidden>
+    <div className={`van-preview-layer ${className}`.trim()} aria-hidden>
       <div className="van-preview-stage">
         <div className="van-preview-scene">
           <img
@@ -57,9 +56,8 @@ function VanLayer({ part, className = '', style }: LayerProps) {
 }
 
 /**
- * Swipe/dot-driven part switcher. Opacity crossfade only — no slide track,
- * finger-follow, peeks, or translate nudges — so cropped shop art never
- * shows a cut van mid-transition.
+ * Swipe/dot part switcher. Current van stays fully opaque underneath;
+ * outgoing layer fades out on top — never leaves the active van stuck at 0.
  */
 export function VanPreviewStage({
   parts,
@@ -69,7 +67,7 @@ export function VanPreviewStage({
 }: VanPreviewStageProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [outgoingPart, setOutgoingPart] = useState<VanPart | null>(null)
-  const [fadeActive, setFadeActive] = useState(false)
+  const [exitActive, setExitActive] = useState(false)
 
   const pointerStartX = useRef(0)
   const pointerStartY = useRef(0)
@@ -112,7 +110,7 @@ export function VanPreviewStage({
   const finishFade = () => {
     clearFadeTimer()
     setOutgoingPart(null)
-    setFadeActive(false)
+    setExitActive(false)
   }
 
   const runCrossfade = (fromPart: VanPart) => {
@@ -120,12 +118,12 @@ export function VanPreviewStage({
       finishFade()
       return
     }
-    setOutgoingPart(fromPart)
-    setFadeActive(false)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => setFadeActive(true))
-    })
     clearFadeTimer()
+    setOutgoingPart(fromPart)
+    setExitActive(false)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setExitActive(true))
+    })
     fadeTimer.current = window.setTimeout(finishFade, TRANSITION_MS)
   }
 
@@ -219,8 +217,6 @@ export function VanPreviewStage({
     dragDxRef.current = 0
   }
 
-  const fading = outgoingPart != null
-
   return (
     <div
       className="van-preview-viewport"
@@ -232,20 +228,14 @@ export function VanPreviewStage({
       aria-label={`${activePart?.name ?? 'Van part'}. Swipe to browse parts.`}
     >
       <div className="van-preview-stack">
-        {fading ? (
-          <>
-            <VanLayer
-              part={outgoingPart}
-              className={`van-preview-layer--exit${fadeActive ? ' van-preview-layer--exit-active' : ''}`}
-            />
-            <VanLayer
-              part={activePart}
-              className={`van-preview-layer--enter${fadeActive ? ' van-preview-layer--enter-active' : ''}`}
-            />
-          </>
-        ) : (
-          <VanLayer part={activePart} className="van-preview-layer--current" />
-        )}
+        {/* Current always fully opaque underneath — never stuck faded. */}
+        <VanLayer part={activePart} className="van-preview-layer--current" />
+        {outgoingPart ? (
+          <VanLayer
+            part={outgoingPart}
+            className={`van-preview-layer--exit${exitActive ? ' van-preview-layer--exit-active' : ''}`}
+          />
+        ) : null}
       </div>
     </div>
   )
