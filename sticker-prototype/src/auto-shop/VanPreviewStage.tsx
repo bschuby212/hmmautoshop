@@ -1,23 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react'
-import {
-  autoShopBaseVanSrc,
-  type VanPart,
-  type VanPartCamera,
-  type VanPartPlacement,
-} from '../data/vanParts'
-
-function cssLength(value: number | string) {
-  return typeof value === 'number' ? `${value}%` : value
-}
-
-function placementStyle(placement: VanPartPlacement): CSSProperties {
-  return {
-    width: cssLength(placement.width),
-    left: cssLength(placement.x),
-    top: cssLength(placement.y),
-    transformOrigin: placement.anchor ?? 'top left',
-  }
-}
+import { type VanPart, type VanPartCamera } from '../data/vanParts'
 
 /** Keep the full van centered; cameras only nudge gently on swipe. */
 const BASE_FRAME_Y = 0
@@ -35,7 +17,7 @@ function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperti
 
 type VanPreviewStageProps = {
   part: VanPart
-  /** When true, fade the accessory in/out with the camera move. */
+  /** When true, crossfade the van composite with the camera move. */
   transitioning?: boolean
 }
 
@@ -55,18 +37,11 @@ export function VanPreviewStage({ part, transitioning = false }: VanPreviewStage
       <div className="van-preview-stage" style={cameraStyle(part.camera, reducedMotion)}>
         <div className="van-preview-scene">
           <img
-            className="van-preview-base"
-            src={autoShopBaseVanSrc}
-            alt=""
-            draggable={false}
-          />
-          <img
             key={part.id}
-            className={`van-preview-accessory${transitioning ? ' van-preview-accessory--switching' : ''}${reducedMotion ? ' van-preview-accessory--instant' : ''}`}
-            src={part.imageSrc}
+            className={`van-preview-van${transitioning ? ' van-preview-van--switching' : ''}${reducedMotion ? ' van-preview-van--instant' : ''}`}
+            src={part.vanSrc}
             alt=""
             draggable={false}
-            style={placementStyle(part.accessory)}
           />
         </div>
       </div>
@@ -78,17 +53,11 @@ type BeachVanAccessoryProps = {
   part: VanPart
 }
 
-/** Accessory attached inside the existing drive-off van wrap (shares its transform). */
-export function BeachVanAccessory({ part }: BeachVanAccessoryProps) {
-  const placement = part.beachPlacement ?? part.accessory
-  const src = part.beachImageSrc ?? part.imageSrc
-  return (
-    <img
-      className="drive-off-accessory"
-      src={src}
-      alt=""
-      draggable={false}
-      style={placementStyle(placement)}
-    />
-  )
+/**
+ * Composites are full vans, so the beach drive-off swaps the van image
+ * instead of layering a separate accessory. This component is unused for
+ * composites but kept as a no-op export for App wiring compatibility.
+ */
+export function BeachVanAccessory(_props: BeachVanAccessoryProps) {
+  return null
 }

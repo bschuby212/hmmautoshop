@@ -117,51 +117,41 @@
 .van-preview-scene {
   position: relative;
   width: 100%;
-  aspect-ratio: 928 / 944;
+  display: grid;
+  place-items: center;
 }
 
-.van-preview-base,
-.van-preview-accessory {
-  image-rendering: auto;
-  backface-visibility: hidden;
-}
-
-.van-preview-base {
+.van-preview-van {
   display: block;
   width: 100%;
   height: auto;
   user-select: none;
   pointer-events: none;
-}
-
-.van-preview-accessory {
-  position: absolute;
-  height: auto;
-  max-width: none;
-  user-select: none;
-  pointer-events: none;
+  image-rendering: auto;
+  backface-visibility: hidden;
   opacity: 1;
   transform: translateZ(0) scale(1);
   transition:
-    opacity 420ms cubic-bezier(0.22, 0.8, 0.28, 1),
-    transform 420ms cubic-bezier(0.22, 0.8, 0.28, 1);
-  animation: auto-shop-accessory-in 420ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
+    opacity 360ms cubic-bezier(0.22, 0.8, 0.28, 1),
+    transform 360ms cubic-bezier(0.22, 0.8, 0.28, 1);
+  animation: auto-shop-van-in 420ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
+  filter: drop-shadow(0 10px 16px rgba(28, 20, 8, 0.28));
 }
 
-.van-preview-accessory--switching {
+.van-preview-van--switching {
   opacity: 1;
 }
 
-.van-preview-accessory--instant,
-.van-preview-accessory--instant.van-preview-accessory--switching {
+.van-preview-van--instant,
+.van-preview-van--instant.van-preview-van--switching {
   transition: none;
   animation: none;
 }
 
-@keyframes auto-shop-accessory-in {
+@keyframes auto-shop-van-in {
   from {
     opacity: 0;
-    transform: translateZ(0) translateY(6px) scale(0.99);
+    transform: translateZ(0) translateY(8px) scale(0.985);
   }
   to {
     opacity: 1;
@@ -402,7 +392,7 @@
     transition: none !important;
   }
 
-  .van-preview-accessory {
+  .van-preview-van {
     animation: none !important;
     transition: none !important;
   }

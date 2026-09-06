@@ -16,7 +16,6 @@ import {
 } from './data/stickers'
 import { type VanPart } from './data/vanParts'
 import { AutoShopContent, garageBackground } from './auto-shop/AutoShopContent'
-import { BeachVanAccessory } from './auto-shop/VanPreviewStage'
 import { saveEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
@@ -1060,10 +1059,13 @@ function DriveOffScreen({
     <div className="drive-off-screen" aria-label="Van driving off">
       <img className="drive-off-coast" src={driveOffCoast} alt="" draggable={false} />
       <div className={`drive-off-van-wrap${driving ? ' drive-off-van-wrap--driving' : ''}`}>
-        <img className="drive-off-van" src={driveOffVan} alt="" draggable={false} />
-        {accessory ? (
-          <BeachVanAccessory part={accessory} />
-        ) : sticker && stickerPercent ? (
+        <img
+          className="drive-off-van"
+          src={accessory?.vanSrc ?? driveOffVan}
+          alt=""
+          draggable={false}
+        />
+        {!accessory && sticker && stickerPercent ? (
           <img
             className="drive-off-sticker"
             src={sticker.stickerArt}
