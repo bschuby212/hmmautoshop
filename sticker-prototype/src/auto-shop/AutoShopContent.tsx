@@ -47,7 +47,7 @@ export function AutoShopContent({
     }
 
     setIsTransitioning(true)
-    const duration = vanParts[wrapped]?.camera.duration ?? 420
+    const duration = vanParts[wrapped]?.camera.duration ?? 480
     transitionTimer.current = window.setTimeout(() => {
       setIsTransitioning(false)
       transitionTimer.current = null

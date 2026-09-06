@@ -1,28 +1,25 @@
-import { useEffect, useState, type CSSProperties } from 'react'
-import { type VanPart, type VanPartCamera } from '../data/vanParts'
+import { useEffect, useRef, useState } from 'react'
+import { type VanPart } from '../data/vanParts'
 
-/** Keep the full van centered; cameras only nudge gently on swipe. */
-const BASE_FRAME_Y = 0
-
-function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperties {
-  const duration = reducedMotion ? 1 : (camera.duration ?? 420)
-  return {
-    transform: `translate3d(${camera.x}px, ${BASE_FRAME_Y + camera.y}px, 0) scale(${camera.scale})`,
-    transformOrigin: camera.transformOrigin ?? '50% 55%',
-    transition: reducedMotion
-      ? 'none'
-      : `transform ${duration}ms cubic-bezier(0.22, 0.8, 0.28, 1)`,
-  }
-}
+const CROSSFADE_MS = 480
 
 type VanPreviewStageProps = {
   part: VanPart
-  /** When true, crossfade the van composite with the camera move. */
+  /** Kept for callers; crossfade is driven by part id changes. */
   transitioning?: boolean
 }
 
-export function VanPreviewStage({ part, transitioning = false }: VanPreviewStageProps) {
+/**
+ * Centered full-van composites with a soft opacity crossfade between parts.
+ * No zoom or pan — the van stays put while the image dissolves.
+ */
+export function VanPreviewStage({ part }: VanPreviewStageProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [displayPart, setDisplayPart] = useState(part)
+  const [outgoingPart, setOutgoingPart] = useState<VanPart | null>(null)
+  const [fading, setFading] = useState(false)
+  const displayRef = useRef(part)
+  const fadeTimer = useRef<number | null>(null)
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -32,14 +29,52 @@ export function VanPreviewStage({ part, transitioning = false }: VanPreviewStage
     return () => media.removeEventListener('change', sync)
   }, [])
 
+  useEffect(() => {
+    if (part.id === displayRef.current.id) return
+
+    if (fadeTimer.current) window.clearTimeout(fadeTimer.current)
+
+    if (reducedMotion) {
+      displayRef.current = part
+      setOutgoingPart(null)
+      setDisplayPart(part)
+      setFading(false)
+      return
+    }
+
+    setOutgoingPart(displayRef.current)
+    displayRef.current = part
+    setDisplayPart(part)
+    setFading(true)
+    fadeTimer.current = window.setTimeout(() => {
+      setOutgoingPart(null)
+      setFading(false)
+      fadeTimer.current = null
+    }, CROSSFADE_MS)
+  }, [part, reducedMotion])
+
+  useEffect(() => {
+    return () => {
+      if (fadeTimer.current) window.clearTimeout(fadeTimer.current)
+    }
+  }, [])
+
   return (
     <div className="van-preview-viewport" aria-hidden={false}>
-      <div className="van-preview-stage" style={cameraStyle(part.camera, reducedMotion)}>
+      <div className="van-preview-stage">
         <div className="van-preview-scene">
+          {outgoingPart ? (
+            <img
+              className={`van-preview-van van-preview-van--outgoing${fading ? ' van-preview-van--fade-out' : ''}`}
+              src={outgoingPart.vanSrc}
+              alt=""
+              draggable={false}
+            />
+          ) : null}
           <img
-            key={part.id}
-            className={`van-preview-van${transitioning ? ' van-preview-van--switching' : ''}${reducedMotion ? ' van-preview-van--instant' : ''}`}
-            src={part.vanSrc}
+            key={displayPart.id}
+            className={`van-preview-van van-preview-van--incoming${fading ? ' van-preview-van--fade-in' : ''}${reducedMotion ? ' van-preview-van--instant' : ''}`}
+            src={displayPart.vanSrc}
             alt=""
             draggable={false}
           />
@@ -53,11 +88,7 @@ type BeachVanAccessoryProps = {
   part: VanPart
 }
 
-/**
- * Composites are full vans, so the beach drive-off swaps the van image
- * instead of layering a separate accessory. This component is unused for
- * composites but kept as a no-op export for App wiring compatibility.
- */
+/** Composites replace the whole beach van; no separate accessory layer. */
 export function BeachVanAccessory(_props: BeachVanAccessoryProps) {
   return null
 }
