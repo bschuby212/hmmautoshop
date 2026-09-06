@@ -19,17 +19,18 @@ function placementStyle(placement: VanPartPlacement): CSSProperties {
   }
 }
 
-/** Vertical centering for the painted van inside its padded asset. */
-const BASE_FRAME_Y = -36
+/** Seat the painted van on the garage lift rails.
+ *  Base van art has ~23.5% transparent pad under the tires. */
+const BASE_FRAME_Y = 96
 
 function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperties {
-  const duration = reducedMotion ? 1 : (camera.duration ?? 520)
+  const duration = reducedMotion ? 1 : (camera.duration ?? 420)
   return {
     transform: `translate3d(${camera.x}px, ${BASE_FRAME_Y + camera.y}px, 0) scale(${camera.scale})`,
-    transformOrigin: camera.transformOrigin ?? '50% 50%',
+    transformOrigin: camera.transformOrigin ?? '50% 55%',
     transition: reducedMotion
       ? 'none'
-      : `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+      : `transform ${duration}ms cubic-bezier(0.22, 0.8, 0.28, 1)`,
   }
 }
 

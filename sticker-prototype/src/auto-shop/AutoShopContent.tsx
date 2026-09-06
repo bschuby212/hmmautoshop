@@ -47,7 +47,7 @@ export function AutoShopContent({
     }
 
     setIsTransitioning(true)
-    const duration = vanParts[wrapped]?.camera.duration ?? 520
+    const duration = vanParts[wrapped]?.camera.duration ?? 420
     transitionTimer.current = window.setTimeout(() => {
       setIsTransitioning(false)
       transitionTimer.current = null
@@ -85,21 +85,34 @@ export function AutoShopContent({
 
         <VanPreviewStage part={activePart} transitioning={isTransitioning} />
 
-        <PartNavigation
-          partName={activePart.name}
-          partDescription={activePart.description}
-          positionLabel={`${activePartIndex + 1} of ${total}`}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-          disabled={isConfirming}
-        />
+        <div className="auto-shop-footer">
+          <div className="auto-shop-footer-scrim" aria-hidden="true" />
+          <div className="auto-shop-footer-content">
+            <PartNavigation
+              partName={activePart.name}
+              partDescription={activePart.description}
+              positionLabel={`${activePartIndex + 1} of ${total}`}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+              disabled={isConfirming}
+            />
 
-        <div className="auto-shop-actions">
-          <AddToVanButton
-            onClick={handleAdd}
-            confirming={isConfirming}
-            disabled={isConfirming}
-          />
+            <div className="auto-shop-actions">
+              <AddToVanButton
+                onClick={handleAdd}
+                confirming={isConfirming}
+                disabled={isConfirming}
+              />
+              <button
+                type="button"
+                className="auto-shop-save-for-later"
+                onClick={onClose}
+                disabled={isConfirming}
+              >
+                Save for later
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

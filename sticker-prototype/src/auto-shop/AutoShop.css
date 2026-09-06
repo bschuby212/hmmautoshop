@@ -2,14 +2,20 @@
   color: #063235;
   background-color: #c4b49a;
   background-size: cover;
-  background-position: center 58%;
+  background-position: center 64%;
   background-repeat: no-repeat;
+}
+
+/* Beat .selection-screen center-top so the lift rails stay in frame. */
+.auto-shop.selection-screen {
+  background-size: cover;
+  background-position: center 64%;
 }
 
 .auto-shop-sheet-placeholder {
   background-color: #c4b49a;
   background-size: cover;
-  background-position: center 58%;
+  background-position: center 64%;
   background-repeat: no-repeat;
 }
 
@@ -21,46 +27,41 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 16px 28px;
-  gap: 10px;
-}
-
-.auto-shop-header,
-.van-preview-viewport,
-.part-navigation,
-.auto-shop-actions {
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  padding: 12px 0 0;
+  gap: 0;
+  position: relative;
 }
 
 .auto-shop-header {
   position: relative;
+  z-index: 3;
   width: 100%;
   max-width: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 72px;
+  min-height: 68px;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 4px;
+  padding: 0 16px;
+  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 40ms;
 }
 
 .van-preview-viewport {
+  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 120ms;
 }
 
-.part-navigation {
+.auto-shop-footer {
+  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 220ms;
-}
-
-.auto-shop-actions {
-  animation-delay: 300ms;
 }
 
 @keyframes auto-shop-rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(0, 18px, 0);
   }
   to {
     opacity: 1;
@@ -69,7 +70,7 @@
 }
 
 .auto-shop-sign {
-  width: min(300px, 86%);
+  width: min(280px, 82%);
   pointer-events: none;
   display: grid;
   place-items: center;
@@ -87,8 +88,8 @@
 
 .auto-shop-close {
   position: absolute;
-  right: 0;
-  top: 10px;
+  right: 16px;
+  top: 8px;
   width: 40px;
   height: 40px;
   border: none;
@@ -121,29 +122,37 @@
 .van-preview-viewport {
   position: relative;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   flex: 1 1 auto;
-  min-height: 250px;
-  max-height: 380px;
-  overflow: hidden;
+  min-height: 280px;
+  max-height: none;
+  overflow: visible;
   display: grid;
-  place-items: center;
+  place-items: end center;
+  align-content: end;
   background: transparent;
-  margin-top: 2px;
+  margin-top: 0;
+  margin-bottom: -40px;
+  padding-bottom: 0;
+  z-index: 1;
 }
 
 .van-preview-stage {
-  width: 118%;
+  /* Full van, grounded to the garage lift bay. */
+  width: 176%;
   will-change: transform;
-  filter: drop-shadow(0 8px 14px rgba(40, 28, 12, 0.22));
+  filter: drop-shadow(0 8px 12px rgba(28, 20, 8, 0.28));
   backface-visibility: hidden;
   transform: translateZ(0);
+  margin-bottom: 0;
 }
 
 .van-preview-scene {
   position: relative;
   width: 100%;
   aspect-ratio: 928 / 944;
+  /* Pull tires down through the transparent pad in the van art. */
+  margin-bottom: -24%;
 }
 
 .van-preview-base,
@@ -169,9 +178,9 @@
   opacity: 1;
   transform: translateZ(0) scale(1);
   transition:
-    opacity 480ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
-  animation: auto-shop-accessory-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    opacity 420ms cubic-bezier(0.22, 0.8, 0.28, 1),
+    transform 420ms cubic-bezier(0.22, 0.8, 0.28, 1);
+  animation: auto-shop-accessory-in 420ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
 }
 
 .van-preview-accessory--switching {
@@ -187,12 +196,70 @@
 @keyframes auto-shop-accessory-in {
   from {
     opacity: 0;
-    transform: translateZ(0) translateY(8px) scale(0.985);
+    transform: translateZ(0) translateY(6px) scale(0.99);
   }
   to {
     opacity: 1;
     transform: translateZ(0) translateY(0) scale(1);
   }
+}
+
+.auto-shop-footer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 0 0 22px;
+}
+
+.auto-shop-footer-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 380px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 12, 9, 0) 0%,
+    rgba(16, 12, 9, 0.06) 22%,
+    rgba(12, 9, 7, 0.24) 48%,
+    rgba(8, 6, 5, 0.42) 74%,
+    rgba(6, 5, 4, 0.55) 100%
+  );
+}
+
+.auto-shop-footer-scrim::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(26px) saturate(1.1);
+  backdrop-filter: blur(26px) saturate(1.1);
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 24%,
+    rgba(0, 0, 0, 0.7) 55%,
+    #000 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 24%,
+    rgba(0, 0, 0, 0.7) 55%,
+    #000 100%
+  );
+}
+
+.auto-shop-footer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 52px 16px 0;
 }
 
 .part-navigation {
@@ -203,11 +270,11 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
-  padding: 10px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 4px 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 .part-navigation-copy {
@@ -217,34 +284,41 @@
 
 .part-navigation-name {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.4px;
-  color: #063235;
+  color: #f7f4ee;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .part-navigation-description {
-  margin: 4px 0 0;
+  margin: 5px 0 0;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.35;
-  color: rgba(6, 50, 53, 0.78);
+  color: rgba(247, 244, 238, 0.9);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 .part-navigation-position {
   margin: 6px 0 0;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  color: rgba(6, 50, 53, 0.62);
+  color: rgba(247, 244, 238, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .part-nav-arrow {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  border: 2px solid #7960d9;
-  background: rgba(255, 255, 255, 0.92);
-  color: #7960d9;
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.2);
+  color: #f7f4ee;
   font-size: 32px;
   line-height: 1;
   cursor: pointer;
@@ -252,19 +326,21 @@
   place-items: center;
   transition: background 140ms ease, transform 140ms ease;
   flex-shrink: 0;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .part-nav-arrow:hover:not(:disabled) {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .part-nav-arrow:active:not(:disabled) {
   transform: scale(0.96);
-  background: rgba(121, 96, 217, 0.12);
+  background: rgba(121, 96, 217, 0.28);
 }
 
 .part-nav-arrow:focus-visible {
-  outline: 2px solid #7960d9;
+  outline: 2px solid #f7f4ee;
   outline-offset: 2px;
 }
 
@@ -276,6 +352,9 @@
 .auto-shop-actions {
   width: 100%;
   max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 2px;
   flex-shrink: 0;
 }
@@ -292,7 +371,7 @@
   font-weight: 700;
   letter-spacing: -0.2px;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(80, 48, 160, 0.28);
+  box-shadow: 0 6px 16px rgba(80, 48, 160, 0.32);
 }
 
 .add-to-van-button:hover:not(:disabled) {
@@ -300,11 +379,41 @@
 }
 
 .add-to-van-button:focus-visible {
-  outline: 2px solid #063235;
+  outline: 2px solid #f7f4ee;
   outline-offset: 2px;
 }
 
 .add-to-van-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.auto-shop-save-for-later {
+  width: 100%;
+  min-height: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.12);
+  color: #f7f4ee;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.auto-shop-save-for-later:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.auto-shop-save-for-later:focus-visible {
+  outline: 2px solid #f7f4ee;
+  outline-offset: 2px;
+}
+
+.auto-shop-save-for-later:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -322,8 +431,7 @@
 @media (prefers-reduced-motion: reduce) {
   .auto-shop-header,
   .van-preview-viewport,
-  .part-navigation,
-  .auto-shop-actions {
+  .auto-shop-footer {
     animation: none !important;
   }
 
