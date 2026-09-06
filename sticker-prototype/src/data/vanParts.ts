@@ -65,7 +65,7 @@ const stillCamera: VanPartCamera = {
 export const vanParts: VanPart[] = [
   {
     id: 'bike-rack',
-    name: 'bike rack',
+    name: 'Bike rack',
     description: 'Rear hitch mount that carries two bikes for the trail.',
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
@@ -77,7 +77,7 @@ export const vanParts: VanPart[] = [
   {
     id: 'kayak',
     name: 'Kayak',
-    description: 'A red kayak strapped to the roof for water days.',
+    description: 'Roof straps that lock a kayak on for water days.',
     partSrc: kayakPart,
     shopSrc: shopKayak,
     // Figma: left 25 / width 341 — full side profile, seated a bit lower.
@@ -88,7 +88,7 @@ export const vanParts: VanPart[] = [
   {
     id: 'eyelashes',
     name: 'Eyelashes',
-    description: 'Playful lash decals that give the headlights some charm.',
+    description: 'Headlight decals that give the van a little personality.',
     partSrc: eyelashesPart,
     shopSrc: shopEyelashes,
     // Figma: left -174 / width 495 — favor the front headlights.

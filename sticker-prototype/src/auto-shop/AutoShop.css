@@ -304,7 +304,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 0;
   padding: 28px 20px 0;
 }
 
@@ -316,6 +316,7 @@
   gap: 9px;
   height: 10px;
   flex-shrink: 0;
+  margin-bottom: 16px;
 }
 
 .part-dot {
@@ -350,6 +351,8 @@
   gap: 12px;
   flex-shrink: 0;
   text-align: center;
+  /* 12px between copy and Add to Van. */
+  margin-bottom: 12px;
 }
 
 .part-navigation-name {
