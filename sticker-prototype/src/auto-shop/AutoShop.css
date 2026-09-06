@@ -159,10 +159,10 @@
 .van-preview-viewport {
   position: relative;
   width: 100%;
-  max-width: 360px;
+  max-width: 393px;
   flex: 1 1 auto;
-  min-height: 220px;
-  overflow: visible;
+  min-height: 248px;
+  overflow: hidden;
   display: grid;
   place-items: center;
   align-content: center;
@@ -180,44 +180,43 @@
 }
 
 .van-preview-stage {
-  /* Equipped preview under the part hero — slightly smaller so the part reads first. */
+  /* Full phone width so Figma crops (overflowing left/right) can frame each part. */
+  position: relative;
   width: 100%;
-  max-width: 340px;
+  max-width: none;
+  height: 248px;
   will-change: transform;
   filter: drop-shadow(0 10px 16px rgba(28, 20, 8, 0.28));
   backface-visibility: hidden;
   transform: translateZ(0);
   margin: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .van-preview-scene {
   position: relative;
   width: 100%;
-  display: grid;
-  place-items: center;
+  height: 248px;
+  overflow: hidden;
 }
 
 .van-preview-van {
-  grid-area: 1 / 1;
   display: block;
-  width: 100%;
   height: auto;
   user-select: none;
   pointer-events: none;
   image-rendering: auto;
   backface-visibility: hidden;
   opacity: 1;
-  transform: none;
+  /* width / left / top come from Figma shopFrame inline styles */
 }
 
 .van-preview-van--incoming {
-  position: relative;
   z-index: 1;
 }
 
 .van-preview-van--outgoing {
-  position: relative;
   z-index: 2;
 }
 
@@ -290,6 +289,38 @@
   padding: 28px 20px 0;
 }
 
+/* Figma page dots — 10px, ~9px gap, active = solid white. */
+.part-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.part-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+
+.part-dot--active {
+  background: #ffffff;
+}
+
+.part-dot:disabled {
+  cursor: default;
+}
+
+.part-dot:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
 
 .part-navigation {
   width: 100%;

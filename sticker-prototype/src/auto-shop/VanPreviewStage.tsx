@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import { type VanPart } from '../data/vanParts'
 
 const CROSSFADE_MS = 480
@@ -13,10 +13,22 @@ type VanPreviewStageProps = {
   swipeDisabled?: boolean
 }
 
+function shopImageStyle(part: VanPart): CSSProperties {
+  const frame = part.shopFrame ?? { widthPercent: 100, leftPercent: 0, topPx: 0 }
+  const { widthPercent, leftPercent, topPx = 0 } = frame
+  return {
+    width: `${widthPercent}%`,
+    maxWidth: 'none',
+    left: `${leftPercent}%`,
+    top: topPx,
+    height: 'auto',
+    position: 'absolute',
+  }
+}
+
 /**
- * Centered full-van composites with a soft opacity crossfade between parts.
- * No zoom or pan — the van stays put while the image dissolves.
- * Horizontal swipe browses parts until arrow UI is designed.
+ * Shop carousel preview — Figma-framed van composites.
+ * Horizontal swipe moves between the three parts.
  */
 export function VanPreviewStage({
   part,
@@ -111,17 +123,19 @@ export function VanPreviewStage({
           {outgoingPart ? (
             <img
               className={`van-preview-van van-preview-van--outgoing${fading ? ' van-preview-van--fade-out' : ''}`}
-              src={outgoingPart.vanSrc}
+              src={outgoingPart.shopSrc}
               alt=""
               draggable={false}
+              style={shopImageStyle(outgoingPart)}
             />
           ) : null}
           <img
             key={displayPart.id}
             className={`van-preview-van van-preview-van--incoming${fading ? ' van-preview-van--fade-in' : ''}${reducedMotion ? ' van-preview-van--instant' : ''}`}
-            src={displayPart.vanSrc}
+            src={displayPart.shopSrc}
             alt=""
             draggable={false}
+            style={shopImageStyle(displayPart)}
           />
         </div>
       </div>

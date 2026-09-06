@@ -3,6 +3,7 @@ import { vanParts, type VanPart } from '../data/vanParts'
 import garageBackground from '../assets/auto-shop/garage-bg.jpg'
 import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { AddToVanButton } from './AddToVanButton'
+import { PartDots } from './PartDots'
 import { PartNavigation } from './PartNavigation'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
@@ -87,6 +88,13 @@ export function AutoShopContent({
         <div className="auto-shop-footer">
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
+            <PartDots
+              total={total}
+              activeIndex={activePartIndex}
+              onSelect={goToIndex}
+              disabled={isConfirming}
+            />
+
             <PartNavigation
               partName={activePart.name}
               partDescription={activePart.description}
