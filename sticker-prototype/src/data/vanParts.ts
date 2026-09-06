@@ -56,7 +56,8 @@ export const vanParts: VanPart[] = [
     name: 'Roof rack',
     imageSrc: roofRack,
     accessory: { width: '58%', x: '21%', y: '28%', anchor: 'top left' },
-    camera: { scale: 1.55, x: 0, y: 48, transformOrigin: '50% 32%', duration: 550 },
+    // Gentle POV nudge — keep the full van in frame.
+    camera: { scale: 1.02, x: 0, y: 10, transformOrigin: '50% 42%', duration: 480 },
     beachPlacement: { width: '54%', x: '22%', y: '6%', anchor: 'top left' },
   },
   {
@@ -64,7 +65,7 @@ export const vanParts: VanPart[] = [
     name: 'Bike rack',
     imageSrc: bikeRack,
     accessory: { width: '16%', x: '1%', y: '40%', anchor: 'top left' },
-    camera: { scale: 1.75, x: 110, y: -8, transformOrigin: '12% 55%', duration: 580 },
+    camera: { scale: 1.04, x: 18, y: 2, transformOrigin: '22% 55%', duration: 500 },
     beachPlacement: { width: '18%', x: '1%', y: '28%', anchor: 'top left' },
   },
   {
@@ -72,7 +73,7 @@ export const vanParts: VanPart[] = [
     name: 'Solar panels',
     imageSrc: solarPanels,
     accessory: { width: '62%', x: '19%', y: '31%', anchor: 'top left' },
-    camera: { scale: 1.6, x: 0, y: 52, transformOrigin: '50% 30%', duration: 540 },
+    camera: { scale: 1.02, x: 0, y: 12, transformOrigin: '50% 40%', duration: 480 },
     beachPlacement: { width: '58%', x: '20%', y: '10%', anchor: 'top left' },
   },
   {
@@ -80,7 +81,7 @@ export const vanParts: VanPart[] = [
     name: 'Ski rack',
     imageSrc: skiRack,
     accessory: { width: '56%', x: '22%', y: '29%', anchor: 'top left' },
-    camera: { scale: 1.58, x: -12, y: 50, transformOrigin: '48% 30%', duration: 540 },
+    camera: { scale: 1.02, x: -4, y: 10, transformOrigin: '48% 40%', duration: 480 },
     beachPlacement: { width: '52%', x: '23%', y: '8%', anchor: 'top left' },
   },
   {
@@ -88,7 +89,7 @@ export const vanParts: VanPart[] = [
     name: 'Surfboard and rack',
     imageSrc: surfboardAndRack,
     accessory: { width: '58%', x: '20%', y: '27%', anchor: 'top left' },
-    camera: { scale: 1.62, x: 8, y: 54, transformOrigin: '50% 28%', duration: 560 },
+    camera: { scale: 1.03, x: 4, y: 12, transformOrigin: '50% 38%', duration: 490 },
     beachPlacement: { width: '54%', x: '21%', y: '4%', anchor: 'top left' },
   },
   {
@@ -96,7 +97,7 @@ export const vanParts: VanPart[] = [
     name: 'Rally lights',
     imageSrc: rallyLights,
     accessory: { width: '7%', x: '86%', y: '52%', anchor: 'top left' },
-    camera: { scale: 1.85, x: -120, y: -4, transformOrigin: '88% 58%', duration: 600 },
+    camera: { scale: 1.04, x: -18, y: -2, transformOrigin: '80% 56%', duration: 500 },
     beachPlacement: { width: '8%', x: '84%', y: '42%', anchor: 'top left' },
   },
   {
@@ -104,7 +105,7 @@ export const vanParts: VanPart[] = [
     name: 'Eyelashes',
     imageSrc: eyelashes,
     accessory: { width: '8%', x: '86%', y: '50%', anchor: 'top left' },
-    camera: { scale: 1.9, x: -130, y: 0, transformOrigin: '90% 54%', duration: 600 },
+    camera: { scale: 1.04, x: -20, y: 0, transformOrigin: '82% 54%', duration: 500 },
     beachPlacement: { width: '9%', x: '84%', y: '40%', anchor: 'top left' },
   },
   {
@@ -112,7 +113,7 @@ export const vanParts: VanPart[] = [
     name: 'Mustache',
     imageSrc: mustache,
     accessory: { width: '10%', x: '85%', y: '60%', anchor: 'top left' },
-    camera: { scale: 1.85, x: -125, y: -18, transformOrigin: '88% 64%', duration: 580 },
+    camera: { scale: 1.04, x: -18, y: -6, transformOrigin: '80% 62%', duration: 500 },
     beachPlacement: { width: '11%', x: '83%', y: '52%', anchor: 'top left' },
   },
   {
@@ -120,7 +121,7 @@ export const vanParts: VanPart[] = [
     name: 'Front mustache',
     imageSrc: mustacheFront,
     accessory: { width: '16%', x: '81%', y: '60%', anchor: 'top left' },
-    camera: { scale: 1.8, x: -118, y: -20, transformOrigin: '88% 64%', duration: 580 },
+    camera: { scale: 1.04, x: -16, y: -6, transformOrigin: '80% 62%', duration: 500 },
     beachPlacement: { width: '16%', x: '79%', y: '52%', anchor: 'top left' },
   },
   {
@@ -128,7 +129,7 @@ export const vanParts: VanPart[] = [
     name: 'Kayak',
     imageSrc: kayak,
     accessory: { width: '60%', x: '20%', y: '26%', anchor: 'top left' },
-    camera: { scale: 1.6, x: 0, y: 56, transformOrigin: '50% 28%', duration: 560 },
+    camera: { scale: 1.02, x: 0, y: 12, transformOrigin: '50% 38%', duration: 490 },
     beachPlacement: { width: '56%', x: '21%', y: '3%', anchor: 'top left' },
   },
   {
@@ -136,7 +137,7 @@ export const vanParts: VanPart[] = [
     name: 'Running board',
     imageSrc: runningBoard,
     accessory: { width: '42%', x: '28%', y: '71%', anchor: 'top left' },
-    camera: { scale: 1.55, x: 0, y: -70, transformOrigin: '50% 78%', duration: 550 },
+    camera: { scale: 1.02, x: 0, y: -12, transformOrigin: '50% 72%', duration: 480 },
     beachPlacement: { width: '42%', x: '28%', y: '78%', anchor: 'top left' },
   },
 ]

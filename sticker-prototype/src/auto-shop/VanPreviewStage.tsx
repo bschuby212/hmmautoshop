@@ -19,10 +19,13 @@ function placementStyle(placement: VanPartPlacement): CSSProperties {
   }
 }
 
+/** Vertical centering for the painted van inside its padded asset. */
+const BASE_FRAME_Y = -36
+
 function cameraStyle(camera: VanPartCamera, reducedMotion: boolean): CSSProperties {
   const duration = reducedMotion ? 1 : (camera.duration ?? 520)
   return {
-    transform: `translate3d(${camera.x}px, ${camera.y}px, 0) scale(${camera.scale})`,
+    transform: `translate3d(${camera.x}px, ${BASE_FRAME_Y + camera.y}px, 0) scale(${camera.scale})`,
     transformOrigin: camera.transformOrigin ?? '50% 50%',
     transition: reducedMotion
       ? 'none'

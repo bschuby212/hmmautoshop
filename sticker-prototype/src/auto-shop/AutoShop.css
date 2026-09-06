@@ -72,19 +72,18 @@
   width: 100%;
   max-width: 360px;
   flex: 1 1 auto;
-  min-height: 220px;
-  max-height: 360px;
+  min-height: 260px;
+  max-height: 400px;
   overflow: hidden;
   display: grid;
   place-items: center;
-  border-radius: 16px;
-  background:
-    radial-gradient(ellipse at 50% 70%, rgba(255, 255, 255, 0.55), transparent 65%),
-    linear-gradient(180deg, rgba(250, 248, 247, 0.35), rgba(250, 248, 247, 0.08));
+  background: transparent;
 }
 
 .van-preview-stage {
-  width: 118%;
+  /* ~133% keeps the painted van edge-to-edge without cropping wheels/bumpers.
+     The asset has empty matte around the van, so 100% looks too small. */
+  width: 132%;
   will-change: transform;
 }
 
