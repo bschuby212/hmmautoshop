@@ -60,7 +60,7 @@ const stillCamera: VanPartCamera = {
 
 /**
  * Order matches Figma 17547:4065 carousel: bike rack → kayak → eyelashes.
- * Shop frames mirror Figma image placement in the 393 phone.
+ * Shop frames keep each part’s crop focus, sized to a similar ~230px van height.
  */
 export const vanParts: VanPart[] = [
   {
@@ -69,8 +69,8 @@ export const vanParts: VanPart[] = [
     description: 'Rear hitch mount that carries two bikes for the trail.',
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
-    // Figma: left 79 / width 547 on ~393 frame — favor the rear rack.
-    shopFrame: { widthPercent: 139, leftPercent: 20, topPx: 0 },
+    // Rear-focused crop; width tuned so rendered height ≈ 230px.
+    shopFrame: { widthPercent: 129, leftPercent: 16, topPx: 0 },
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -80,8 +80,8 @@ export const vanParts: VanPart[] = [
     description: 'Roof straps that lock a kayak on for water days.',
     partSrc: kayakPart,
     shopSrc: shopKayak,
-    // Figma: left 25 / width 341 — full side profile, seated a bit lower.
-    shopFrame: { widthPercent: 87, leftPercent: 6.5, topPx: 24 },
+    // Side profile, scaled up to match the other parts’ visual size.
+    shopFrame: { widthPercent: 101, leftPercent: -0.5, topPx: 0 },
     vanSrc: kayakVan,
     camera: stillCamera,
   },
@@ -91,8 +91,8 @@ export const vanParts: VanPart[] = [
     description: 'Headlight decals that give the van a little personality.',
     partSrc: eyelashesPart,
     shopSrc: shopEyelashes,
-    // Figma: left -174 / width 495 — favor the front headlights.
-    shopFrame: { widthPercent: 126, leftPercent: -44, topPx: 0 },
+    // Front-focused crop; width tuned so rendered height ≈ 230px.
+    shopFrame: { widthPercent: 117, leftPercent: -40, topPx: 0 },
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },

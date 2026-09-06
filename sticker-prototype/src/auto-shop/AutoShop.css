@@ -180,14 +180,15 @@
   width: 100%;
   max-width: 393px;
   flex: 1 1 auto;
-  min-height: 248px;
+  min-height: 260px;
   overflow: hidden;
   display: grid;
   place-items: center;
   align-content: center;
   background: transparent;
   margin: 0;
-  padding: 0;
+  /* Nudge the van stage down ~12px in the sheet. */
+  padding: 12px 0 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
@@ -351,8 +352,8 @@
   gap: 12px;
   flex-shrink: 0;
   text-align: center;
-  /* 12px between copy and Add to Van. */
-  margin-bottom: 12px;
+  /* 8px between copy and Add to Van. */
+  margin-bottom: 8px;
 }
 
 .part-navigation-name {
