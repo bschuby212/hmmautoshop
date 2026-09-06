@@ -235,7 +235,7 @@ function MapScreen({
         <button
           type="button"
           className="map-stand-hit"
-          aria-label="Open West Falls Sticker Stand"
+          aria-label="Open Auto Shop"
           onClick={onStandTap}
         />
       ) : null}
