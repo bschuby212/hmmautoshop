@@ -48,7 +48,7 @@ export function AutoShopContent({
         aria-hidden="true"
       />
 
-      {/* Figma 17545:4167 + 17545:4168 — metal plate overlay + title, not baked into garage. */}
+      {/* Figma 17549:4066 metal plate + 17545:4168 title overlay */}
       <header className="auto-shop-sign" aria-label="Auto Shop">
         <div className="auto-shop-sign-plate" aria-hidden="true">
           <img src={autoShopSign} alt="" draggable={false} />

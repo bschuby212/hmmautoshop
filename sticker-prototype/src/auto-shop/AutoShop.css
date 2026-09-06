@@ -38,14 +38,14 @@
   background-repeat: no-repeat;
 }
 
-/* Figma 17545:4167 — metal plate 351×94 at left 22 / top 65. */
+/* Figma 17549:4066 plate (409×90), scaled into the phone at left 22. */
 .auto-shop-sign {
   position: absolute;
   z-index: 3;
   left: 22px;
   top: 65px;
   width: 351px;
-  height: 94px;
+  height: 77px; /* 351 × (90/409) — keep plate aspect so holes aren’t cropped */
   margin: 0;
   padding: 0;
   pointer-events: none;
@@ -58,15 +58,13 @@
   pointer-events: none;
 }
 
-/* Figma crops the full plate art inside 351×94 (h 166% / top -31%). */
+/* Pre-cropped blank metal from 17549:4066. */
 .auto-shop-sign-plate img {
   position: absolute;
-  left: -0.03%;
-  top: -30.85%;
-  width: 100.05%;
-  height: 165.96%;
-  max-width: none;
-  object-fit: cover;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
   display: block;
   user-select: none;
   -webkit-user-drag: none;
