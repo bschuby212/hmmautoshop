@@ -70,7 +70,7 @@ export const vanParts: VanPart[] = [
     partSrc: bikeRackPart,
     shopSrc: shopBikeRack,
     // Rear-focused crop; width tuned so rendered height ≈ 230px.
-    shopFrame: { widthPercent: 129, leftPercent: 16, topPx: 0 },
+    shopFrame: { widthPercent: 118, leftPercent: -2, topPx: 36 },
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -81,7 +81,7 @@ export const vanParts: VanPart[] = [
     partSrc: kayakPart,
     shopSrc: shopKayak,
     // Side profile, scaled up to match the other parts’ visual size.
-    shopFrame: { widthPercent: 101, leftPercent: -0.5, topPx: 0 },
+    shopFrame: { widthPercent: 100, leftPercent: 0, topPx: 28 },
     vanSrc: kayakVan,
     camera: stillCamera,
   },
@@ -92,7 +92,7 @@ export const vanParts: VanPart[] = [
     partSrc: eyelashesPart,
     shopSrc: shopEyelashes,
     // Front-focused crop; width tuned so rendered height ≈ 230px.
-    shopFrame: { widthPercent: 117, leftPercent: -40, topPx: 0 },
+    shopFrame: { widthPercent: 108, leftPercent: -28, topPx: 36 },
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },
