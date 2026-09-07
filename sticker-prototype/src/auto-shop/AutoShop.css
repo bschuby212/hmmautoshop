@@ -118,8 +118,8 @@
   justify-content: center;
   gap: 8px;
   padding: 0 8px;
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 120ms;
+  animation: auto-shop-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 40ms;
 }
 
 .auto-shop-part-hero {
@@ -155,8 +155,8 @@
 }
 
 .auto-shop-footer {
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 220ms;
+  animation: auto-shop-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 80ms;
 }
 
 @keyframes auto-shop-rise {
@@ -192,8 +192,8 @@
   touch-action: pan-y;
   cursor: grab;
   user-select: none;
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 120ms;
+  animation: auto-shop-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 40ms;
 }
 
 .van-preview-viewport:active {

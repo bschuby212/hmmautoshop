@@ -310,6 +310,22 @@
   user-select: none;
   -webkit-user-drag: none;
 }
+/* Auto Shop composites are landscape (~2:1), not the tall padded side-van. */
+.drive-off-van-wrap--composite {
+  left: -18px;
+  top: 372px;
+  width: 429px;
+  height: 220px;
+  overflow: visible;
+}
+.drive-off-van--composite {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
 .drive-off-sticker {
   position: absolute;
   width: 22px;
@@ -492,22 +508,21 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  /* Keep top inset fixed; animate only transform (avoids layout thrash). */
+  top: 24px;
   bottom: 0;
   z-index: 12;
   overflow: hidden;
   transform: translateY(100%);
-  transition:
-    transform 820ms cubic-bezier(0.16, 1, 0.3, 1),
-    top 820ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 28px 28px 0 0;
   box-shadow:
     0 -2px 4px rgba(0, 0, 0, 0.1),
     0 -7px 7px rgba(0, 0, 0, 0.09),
     0 -16px 10px rgba(0, 0, 0, 0.05);
+  will-change: transform;
 }
 .selection-sheet--open {
-  top: 24px;
   transform: translateY(0);
 }
 .selection-screen--sheet {
