@@ -60,9 +60,10 @@ const stillCamera: VanPartCamera = {
 }
 
 /**
- * Exact Figma 17547:4065 boxes (phone 393px):
+ * Exact Figma 17547:4065 boxes (phone 393px), with kayak scaled up to the
+ * same ~248px height as bike/eyelashes so crossfades stay size-matched:
  * - bike rack: left 63 / top 280 / 547×248
- * - kayak:     left 25 / top 336 / 341×198
+ * - kayak:     ~427×248 (was Figma 341×198)
  * - eyelashes: left -174 / top 296 / 495×248
  * topPx is relative to the bike-rack baseline (280).
  */
@@ -83,7 +84,7 @@ export const vanParts: VanPart[] = [
     description: 'Roof straps that lock a kayak on for water days.',
     partSrc: kayakPart,
     shopSrc: shopKayak,
-    shopFrame: { widthPx: 341, leftPx: 25, heightPx: 198, topPx: 56 },
+    shopFrame: { widthPx: 427, leftPx: -18, heightPx: 248, topPx: 0 },
     vanSrc: kayakVan,
     camera: stillCamera,
   },
