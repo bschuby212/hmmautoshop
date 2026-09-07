@@ -8,7 +8,7 @@ import { PartNavigation } from './PartNavigation'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
 
-export { garageBackground }
+export { garageBackground, autoShopSign }
 
 type AutoShopContentProps = {
   onAddToVan: (part: VanPart) => void

@@ -14,8 +14,8 @@ import {
   type AppScreen,
   type StickerSet,
 } from './data/stickers'
-import { type VanPart } from './data/vanParts'
-import { AutoShopContent, garageBackground } from './auto-shop/AutoShopContent'
+import { type VanPart, vanParts } from './data/vanParts'
+import { AutoShopContent, garageBackground, autoShopSign } from './auto-shop/AutoShopContent'
 import { saveEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
@@ -1223,9 +1223,27 @@ function App() {
     return () => timers.current.forEach((timer) => window.clearTimeout(timer))
   }, [])
 
+  // Decode Auto Shop art during map so the sheet opens as one composition.
+  useEffect(() => {
+    const urls = [
+      garageBackground,
+      autoShopSign,
+      ...vanParts.map((part) => part.shopSrc),
+    ]
+    for (const url of urls) {
+      const image = new Image()
+      image.src = url
+    }
+  }, [])
+
   useEffect(() => {
     if (!sheetOpen) {
       setSheetReady(false)
+      return
+    }
+    // Sticker-mode package deal still waits for sheet settle; Auto Shop mounts immediately.
+    if (autoShopMode) {
+      setSheetReady(true)
       return
     }
     const sheet = sheetRef.current
@@ -1255,7 +1273,7 @@ function App() {
       window.clearTimeout(fallbackTimer)
       if (settleTimer) window.clearTimeout(settleTimer)
     }
-  }, [sheetOpen])
+  }, [sheetOpen, autoShopMode])
 
   // Measured before paint so the overlay is already sitting on the package
   // sticker for the first frame of the lift. The target is re-measured once the
@@ -1381,19 +1399,11 @@ function App() {
             className={`selection-sheet${sheetOpen ? ' selection-sheet--open' : ''}`}
           >
             {autoShopMode ? (
-              sheetReady ? (
-                <AutoShopContent
-                  onAddToVan={handleAddToVan}
-                  onClose={handleSaveForLater}
-                  isConfirming={isConfirming}
-                />
-              ) : (
-                <div
-                  className={`selection-screen selection-screen--sheet${sheetOpen ? ' selection-screen--sheet-open' : ''} auto-shop-sheet-placeholder`}
-                  style={{ backgroundImage: `url(${garageBackground})` }}
-                  aria-hidden
-                />
-              )
+              <AutoShopContent
+                onAddToVan={handleAddToVan}
+                onClose={handleSaveForLater}
+                isConfirming={isConfirming}
+              />
             ) : (
               <StickerSelectionScreen
                 asSheet
