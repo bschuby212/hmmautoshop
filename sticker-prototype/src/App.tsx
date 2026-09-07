@@ -1058,9 +1058,11 @@ function DriveOffScreen({
   return (
     <div className="drive-off-screen" aria-label="Van driving off">
       <img className="drive-off-coast" src={driveOffCoast} alt="" draggable={false} />
-      <div className={`drive-off-van-wrap${driving ? ' drive-off-van-wrap--driving' : ''}`}>
+      <div
+        className={`drive-off-van-wrap${accessory ? ' drive-off-van-wrap--composite' : ''}${driving ? ' drive-off-van-wrap--driving' : ''}`}
+      >
         <img
-          className="drive-off-van"
+          className={`drive-off-van${accessory ? ' drive-off-van--composite' : ''}`}
           src={accessory?.vanSrc ?? driveOffVan}
           alt=""
           draggable={false}
@@ -1248,7 +1250,8 @@ function App() {
 
     sheet.addEventListener('transitionend', onTransitionEnd)
     // Fallback if transitionend is skipped (e.g. reduced motion / already open).
-    const fallbackTimer = window.setTimeout(markReady, 900)
+    // Match .selection-sheet transform duration (~520ms) + buffer.
+    const fallbackTimer = window.setTimeout(markReady, 600)
 
     return () => {
       sheet.removeEventListener('transitionend', onTransitionEnd)
