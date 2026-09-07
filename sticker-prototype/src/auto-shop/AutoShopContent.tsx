@@ -67,18 +67,20 @@ export function AutoShopContent({
         <div className="auto-shop-footer">
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
-            <PartDots
-              total={total}
-              activeIndex={activePartIndex}
-              onSelect={goToIndex}
-              disabled={isConfirming}
-            />
+            <div className="auto-shop-copy-block">
+              <PartDots
+                total={total}
+                activeIndex={activePartIndex}
+                onSelect={goToIndex}
+                disabled={isConfirming}
+              />
 
-            <PartNavigation
-              partName={activePart.name}
-              partDescription={activePart.description}
-              partId={activePart.id}
-            />
+              <PartNavigation
+                partName={activePart.name}
+                partDescription={activePart.description}
+                partId={activePart.id}
+              />
+            </div>
 
             <div className="auto-shop-actions">
               <AddToVanButton

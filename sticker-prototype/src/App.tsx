@@ -1025,18 +1025,20 @@ function PlaceStickerScreen({
   )
 }
 
-const DRIVE_OFF_DURATION_MS = 2800
+const DRIVE_OFF_DURATION_MS = 3400
 
 function DriveOffScreen({
   sticker,
   accessory,
   onComplete,
   onChangePlacement,
+  onChangeAccessory,
 }: {
   sticker?: StickerSet
   accessory?: VanPart | null
   onComplete: () => void
   onChangePlacement?: () => void
+  onChangeAccessory?: () => void
 }) {
   const [driving, setDriving] = useState(false)
   const stickerPercent = accessory
@@ -1058,9 +1060,11 @@ function DriveOffScreen({
   return (
     <div className="drive-off-screen" aria-label="Van driving off">
       <img className="drive-off-coast" src={driveOffCoast} alt="" draggable={false} />
-      <div className={`drive-off-van-wrap${driving ? ' drive-off-van-wrap--driving' : ''}`}>
+      <div
+        className={`drive-off-van-wrap${accessory ? ' drive-off-van-wrap--composite' : ''}${driving ? ' drive-off-van-wrap--driving' : ''}`}
+      >
         <img
-          className="drive-off-van"
+          className={`drive-off-van${accessory ? ' drive-off-van--composite' : ''}`}
           src={accessory?.vanSrc ?? driveOffVan}
           alt=""
           draggable={false}
@@ -1084,7 +1088,15 @@ function DriveOffScreen({
           >
             Continue
           </button>
-          {onChangePlacement && !accessory ? (
+          {onChangeAccessory ? (
+            <button
+              type="button"
+              className="save-for-later-button"
+              onClick={onChangeAccessory}
+            >
+              Change accessory
+            </button>
+          ) : onChangePlacement ? (
             <button
               type="button"
               className="save-for-later-button"
@@ -1343,6 +1355,13 @@ function App() {
     setScreen('placement')
   }
 
+  const handleChangeAccessory = () => {
+    setIsConfirming(false)
+    setConfirmedPart(null)
+    setScreen('selection')
+    window.requestAnimationFrame(() => setSheetOpen(true))
+  }
+
   const handleAddToVan = (part: VanPart) => {
     if (isConfirming) return
     setIsConfirming(true)
@@ -1440,6 +1459,7 @@ function App() {
             accessory={autoShopMode ? confirmedPart : null}
             onComplete={handleDriveOffComplete}
             onChangePlacement={autoShopMode ? undefined : handleChangePlacement}
+            onChangeAccessory={autoShopMode ? handleChangeAccessory : undefined}
           />
         ) : null}
         {!autoShopMode ? (

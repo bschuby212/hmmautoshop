@@ -49,6 +49,55 @@
   margin: 0;
   padding: 0;
   pointer-events: none;
+  opacity: 0;
+}
+
+/* Sheet-open choreography: garage rides with the sheet; sign → van → copy ≈ buttons. */
+.selection-sheet--open .auto-shop-sign {
+  animation: auto-shop-enter-sign 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.selection-sheet:not(.selection-sheet--open) .van-preview-viewport,
+.selection-sheet:not(.selection-sheet--open) .auto-shop-copy-block,
+.selection-sheet:not(.selection-sheet--open) .auto-shop-actions,
+.selection-sheet:not(.selection-sheet--open) .auto-shop-footer-scrim {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+}
+
+.selection-sheet--open .van-preview-viewport {
+  animation: auto-shop-enter-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+}
+
+.selection-sheet--open .auto-shop-footer-scrim,
+.selection-sheet--open .auto-shop-copy-block {
+  animation: auto-shop-enter-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) 340ms both;
+}
+
+.selection-sheet--open .auto-shop-actions {
+  animation: auto-shop-enter-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) 380ms both;
+}
+
+@keyframes auto-shop-enter-sign {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes auto-shop-enter-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .auto-shop-sign-plate {
@@ -163,13 +212,13 @@
   display: flex;
   flex-direction: column;
   /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer.
-   * Offset for layout clearing the sign at top 65 (159px pad): 148 - 37 = 111. */
+   * Offset for layout clearing the sign: was 111, lifted 16px → 95. */
   justify-content: flex-start;
   align-items: stretch;
   align-self: center;
   background: transparent;
   margin: 0;
-  padding: 111px 0 0;
+  padding: 95px 0 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
@@ -292,6 +341,13 @@
   align-items: center;
   gap: 0;
   padding: 28px 20px 0;
+}
+
+.auto-shop-copy-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Figma page dots — 10px, ~9px gap, active = solid white. */
@@ -456,6 +512,16 @@
 @media (prefers-reduced-motion: reduce) {
   .auto-shop-part-hero {
     animation: none !important;
+  }
+
+  .auto-shop-sign,
+  .van-preview-viewport,
+  .auto-shop-copy-block,
+  .auto-shop-actions,
+  .auto-shop-footer-scrim {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .van-preview-layer,
