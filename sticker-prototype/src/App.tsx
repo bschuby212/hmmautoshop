@@ -22,6 +22,7 @@ import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
 import mapArt from './assets/map/map.png'
 import mapVanArt from './assets/map/map-van.png'
+import mapAutoShopArt from './assets/map/map-auto-shop.png'
 import backChevron from './assets/map/back-chevron.svg'
 import westFallsBanner from './assets/selection/west-falls-banner.png'
 import driveOffCoast from './assets/drive-off/coast.png'
@@ -220,9 +221,13 @@ function MapScreen({
   return (
     <section className="map-screen" aria-label="Mind map">
       <img className="map-art" src={mapArt} alt="" draggable={false} />
-      <div className="map-shop-art" aria-hidden>
-        <img src={mapArt} alt="" draggable={false} />
-      </div>
+      <img
+        className="map-shop-art"
+        src={mapAutoShopArt}
+        alt=""
+        draggable={false}
+        aria-hidden
+      />
       <img
         className="map-van"
         src={mapVanArt}

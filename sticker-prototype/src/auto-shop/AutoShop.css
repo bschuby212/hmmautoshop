@@ -380,8 +380,7 @@
 }
 
 .add-to-van-button,
-.auto-shop-finish,
-.auto-shop-change {
+.auto-shop-finish {
   width: 100%;
   min-height: 52px;
   height: 52px;
@@ -396,43 +395,25 @@
   cursor: pointer;
 }
 
-.add-to-van-button,
-.auto-shop-finish {
-  border: none;
-  background: #765cd8;
-  color: #fafafa;
-}
-
-.auto-shop-change {
-  border: 2px solid #ffffff;
-  background: rgba(12, 8, 18, 0.18);
-  color: #ffffff;
-}
-
 .add-to-van-button:hover:not(:disabled),
 .auto-shop-finish:hover:not(:disabled) {
   filter: brightness(1.04);
 }
 
-.auto-shop-change:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 .add-to-van-button:focus-visible,
-.auto-shop-finish:focus-visible,
-.auto-shop-change:focus-visible {
+.auto-shop-finish:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 
 .add-to-van-button:disabled,
-.auto-shop-finish:disabled,
-.auto-shop-change:disabled {
+.auto-shop-finish:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
-.auto-shop-save-for-later {
+.auto-shop-save-for-later,
+.auto-shop-change {
   width: 100%;
   max-width: 340px;
   align-self: center;
@@ -449,16 +430,19 @@
   cursor: pointer;
 }
 
-.auto-shop-save-for-later:hover:not(:disabled) {
+.auto-shop-save-for-later:hover:not(:disabled),
+.auto-shop-change:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.auto-shop-save-for-later:focus-visible {
+.auto-shop-save-for-later:focus-visible,
+.auto-shop-change:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 
-.auto-shop-save-for-later:disabled {
+.auto-shop-save-for-later:disabled,
+.auto-shop-change:disabled {
   opacity: 0.5;
   cursor: default;
 }
