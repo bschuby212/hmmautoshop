@@ -1,57 +1,70 @@
 import { useState } from 'react'
 import { vanParts, type VanPart } from '../data/vanParts'
-import garageBackground from '../assets/auto-shop/garage-bg.jpg'
-import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { AddToVanButton } from './AddToVanButton'
+import { autoShopSign, garageBackground } from './autoShopAssets'
 import { PartDots } from './PartDots'
 import { PartNavigation } from './PartNavigation'
 import { VanPreviewStage } from './VanPreviewStage'
 import './AutoShop.css'
 
-export { garageBackground }
-
 type AutoShopContentProps = {
-  onAddToVan: (part: VanPart) => void
+  onFinish: (part: VanPart) => void
   onClose: () => void
-  isConfirming?: boolean
 }
 
 export function AutoShopContent({
-  onAddToVan,
+  onFinish,
   onClose,
-  isConfirming = false,
 }: AutoShopContentProps) {
-  const [activePartIndex, setActivePartIndex] = useState(0)
+  const [activePartIndex, setActivePartIndex] = useState(Math.min(1, vanParts.length - 1))
+  const [placedPart, setPlacedPart] = useState<VanPart | null>(null)
+  const [mode, setMode] = useState<'select' | 'installed' | 'driving'>('select')
   const total = vanParts.length
   const activePart = vanParts[activePartIndex] ?? vanParts[0]
+  const displayedPart = placedPart ?? activePart
+  const isSelecting = mode === 'select'
+  const isDriving = mode === 'driving'
 
   const goToIndex = (nextIndex: number) => {
-    if (isConfirming || total === 0) return
+    if (!isSelecting || total === 0) return
     const wrapped = ((nextIndex % total) + total) % total
     if (wrapped === activePartIndex) return
     setActivePartIndex(wrapped)
   }
 
-  const handleAdd = () => {
-    if (isConfirming) return
-    onAddToVan(activePart)
+  const handlePlace = () => {
+    if (!isSelecting) return
+    setPlacedPart(activePart)
+    setMode('installed')
+  }
+
+  const handleChange = () => {
+    setMode('select')
+    setPlacedPart(null)
+  }
+
+  const handleFinish = () => {
+    if (!placedPart || isDriving) return
+    setMode('driving')
   }
 
   return (
-    <div className="auto-shop selection-screen selection-screen--sheet selection-screen--sheet-open">
-      {/* Figma 17545:4192 — garage bg scaled larger than the phone (485×1048 at -22,-196). */}
+    <div
+      className={`auto-shop auto-shop--${mode} selection-screen selection-screen--sheet selection-screen--sheet-open`}
+    >
       <img
         className="auto-shop-garage-bg"
         src={garageBackground}
         alt=""
         draggable={false}
+        decoding="async"
+        fetchPriority="high"
         aria-hidden="true"
       />
 
-      {/* Figma 17549:4066 metal plate + 17545:4168 title overlay */}
       <header className="auto-shop-sign" aria-label="Auto Shop">
         <div className="auto-shop-sign-plate" aria-hidden="true">
-          <img src={autoShopSign} alt="" draggable={false} />
+          <img src={autoShopSign} alt="" draggable={false} decoding="async" />
         </div>
         <h1 className="auto-shop-sign-title">Auto Shop</h1>
       </header>
@@ -61,39 +74,60 @@ export function AutoShopContent({
           parts={vanParts}
           activeIndex={activePartIndex}
           onChangeIndex={goToIndex}
-          swipeDisabled={isConfirming}
+          swipeDisabled={!isSelecting}
+          frozen={!isSelecting}
+          driving={isDriving}
+          onDriveOffComplete={() => onFinish(displayedPart)}
         />
 
-        <div className="auto-shop-footer">
+        <div className={`auto-shop-footer${isDriving ? ' auto-shop-footer--driving' : ''}`}>
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
             <PartDots
               total={total}
               activeIndex={activePartIndex}
               onSelect={goToIndex}
-              disabled={isConfirming}
+              disabled={!isSelecting}
             />
 
             <PartNavigation
-              partName={activePart.name}
-              partDescription={activePart.description}
-              partId={activePart.id}
+              partName={displayedPart.name}
+              partDescription={displayedPart.description}
+              partId={displayedPart.id}
             />
 
             <div className="auto-shop-actions">
-              <AddToVanButton
-                onClick={handleAdd}
-                confirming={isConfirming}
-                disabled={isConfirming}
-              />
-              <button
-                type="button"
-                className="auto-shop-save-for-later"
-                onClick={onClose}
-                disabled={isConfirming}
-              >
-                Save for Later
-              </button>
+              {isSelecting ? (
+                <>
+                  <AddToVanButton onClick={handlePlace} />
+                  <button
+                    type="button"
+                    className="auto-shop-save-for-later"
+                    onClick={onClose}
+                  >
+                    Save for Later
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="auto-shop-finish"
+                    onClick={handleFinish}
+                    disabled={isDriving}
+                  >
+                    Finish
+                  </button>
+                  <button
+                    type="button"
+                    className="auto-shop-change"
+                    onClick={handleChange}
+                    disabled={isDriving}
+                  >
+                    Change
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

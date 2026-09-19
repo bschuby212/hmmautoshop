@@ -13,17 +13,14 @@
   background-position: initial;
 }
 
-/*
- * Figma 17545:4192 on a 393×852 phone:
- * left -22 / top -196 / width 485 / height 1048 — zoomed-in garage.
- */
+/* Figma 2142:1825 — garage extends just beyond the 393×852 viewport. */
 .auto-shop-garage-bg {
   position: absolute;
   z-index: 0;
-  left: -22px;
-  top: -196px;
-  width: 485px;
-  height: 1048px;
+  left: -14px;
+  top: -40px;
+  width: 423px;
+  height: 940px;
   max-width: none;
   object-fit: cover;
   pointer-events: none;
@@ -33,8 +30,8 @@
 
 .auto-shop-sheet-placeholder {
   background-color: #c4b49a;
-  background-size: 485px 1048px;
-  background-position: -22px -196px;
+  background-size: 423px 940px;
+  background-position: -14px -40px;
   background-repeat: no-repeat;
 }
 
@@ -43,7 +40,7 @@
   position: absolute;
   z-index: 3;
   left: 22px;
-  top: 17px; /* was 65; nudged up 48px total */
+  top: 48px;
   width: 351px;
   height: 77px; /* 351 × (90/409) — keep plate aspect so holes aren’t cropped */
   margin: 0;
@@ -91,17 +88,10 @@
 }
 
 .auto-shop-layout {
-  box-sizing: border-box;
-  flex: 1;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Clear the absolute sign (top 65 + height 94). */
-  padding: 159px 0 0;
-  gap: 0;
-  position: relative;
+  height: 100%;
   z-index: 1;
 }
 
@@ -154,46 +144,27 @@
   }
 }
 
-.auto-shop-footer {
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 220ms;
-}
-
-@keyframes auto-shop-rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 .van-preview-viewport {
-  position: relative;
+  position: absolute;
+  left: 0;
+  top: 204px;
   /* Full Figma phone width so crop boxes (547 / 341 / 495) match 17547:4065. */
   width: 393px;
   max-width: 393px;
-  flex: 1 1 auto;
+  height: 264px;
   min-height: 340px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Figma 17547:4065 — vans sit mid-bay (~top 280), not pinned to footer.
-   * Offset for layout clearing the sign at top 65 (159px pad): 148 - 37 = 111. */
   justify-content: flex-start;
   align-items: stretch;
-  align-self: center;
   background: transparent;
   margin: 0;
-  padding: 111px 0 0;
+  padding: 0;
   z-index: 1;
   touch-action: pan-y;
   cursor: grab;
   user-select: none;
-  animation: auto-shop-rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 120ms;
 }
 
 .van-preview-viewport:active {
@@ -252,7 +223,6 @@
   width: 393px;
   max-width: none;
   height: 264px;
-  filter: drop-shadow(0 10px 16px rgba(28, 20, 8, 0.28));
   backface-visibility: hidden;
   transform: translateZ(0);
   margin: 0;
@@ -278,12 +248,11 @@
 }
 
 .auto-shop-footer {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
   width: 100%;
-  margin-top: auto;
-  flex-shrink: 0;
-  padding: 0 0 28px;
+  pointer-events: none;
 }
 
 /* Figma: dark bottom fade (no card) under title + buttons. */
@@ -305,13 +274,20 @@
 }
 
 .auto-shop-footer-content {
-  position: relative;
+  position: absolute;
+  top: 554px;
+  left: 0;
+  right: 0;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0;
-  padding: 28px 20px 0;
+  padding: 0 20px;
+  pointer-events: auto;
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
 }
 
 /* Figma page dots — 10px, ~9px gap, active = solid white. */
@@ -322,7 +298,7 @@
   gap: 9px;
   height: 10px;
   flex-shrink: 0;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .part-dot {
@@ -357,7 +333,6 @@
   gap: 12px;
   flex-shrink: 0;
   text-align: center;
-  /* ~40px clear gap between description and Add to Van. */
   margin-bottom: 24px;
   opacity: 0;
   transform: translate3d(0, 6px, 0);
@@ -398,12 +373,13 @@
   flex-direction: column;
   gap: 16px;
   flex-shrink: 0;
-  /* ~40px clear gap under the description (with part-navigation margin). */
   margin-top: 0;
   padding-top: 16px;
 }
 
-.add-to-van-button {
+.add-to-van-button,
+.auto-shop-finish,
+.auto-shop-change {
   width: 100%;
   min-height: 52px;
   height: 52px;
@@ -418,16 +394,38 @@
   cursor: pointer;
 }
 
-.add-to-van-button:hover:not(:disabled) {
+.add-to-van-button,
+.auto-shop-finish {
+  border: none;
+  background: #765cd8;
+  color: #fafafa;
+}
+
+.auto-shop-change {
+  border: 2px solid #765cd8;
+  background: rgba(12, 8, 18, 0.18);
+  color: #a993ff;
+}
+
+.add-to-van-button:hover:not(:disabled),
+.auto-shop-finish:hover:not(:disabled) {
   filter: brightness(1.04);
 }
 
-.add-to-van-button:focus-visible {
+.auto-shop-change:hover:not(:disabled) {
+  background: rgba(118, 92, 216, 0.14);
+}
+
+.add-to-van-button:focus-visible,
+.auto-shop-finish:focus-visible,
+.auto-shop-change:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 
-.add-to-van-button:disabled {
+.add-to-van-button:disabled,
+.auto-shop-finish:disabled,
+.auto-shop-change:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -463,6 +461,28 @@
   cursor: default;
 }
 
+.auto-shop-footer--driving .auto-shop-footer-content {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  pointer-events: none;
+}
+
+.van-preview-layer--driving {
+  z-index: 3;
+  will-change: transform;
+  animation: auto-shop-drive-off 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes auto-shop-drive-off {
+  0%,
+  8% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(125%, 0, 0);
+  }
+}
+
 .drive-off-accessory {
   position: absolute;
   height: auto;
@@ -476,8 +496,7 @@
 @media (prefers-reduced-motion: reduce) {
   .auto-shop-stage,
   .auto-shop-part-hero,
-  .auto-shop-footer,
-  .van-preview-viewport {
+  .auto-shop-footer {
     animation: none !important;
   }
 
@@ -495,5 +514,9 @@
   .van-preview-van {
     animation: none !important;
     transition: none !important;
+  }
+
+  .van-preview-layer--driving {
+    animation-duration: 1ms !important;
   }
 }

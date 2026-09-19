@@ -17,6 +17,9 @@ type VanPreviewStageProps = {
   activeIndex: number
   onChangeIndex: (index: number) => void
   swipeDisabled?: boolean
+  frozen?: boolean
+  driving?: boolean
+  onDriveOffComplete?: () => void
 }
 
 function shopImageStyle(part: VanPart): CSSProperties {
@@ -35,11 +38,16 @@ function shopImageStyle(part: VanPart): CSSProperties {
 type LayerProps = {
   part: VanPart
   className?: string
+  onAnimationEnd?: () => void
 }
 
-function VanLayer({ part, className = '' }: LayerProps) {
+function VanLayer({ part, className = '', onAnimationEnd }: LayerProps) {
   return (
-    <div className={`van-preview-layer ${className}`.trim()} aria-hidden>
+    <div
+      className={`van-preview-layer ${className}`.trim()}
+      aria-hidden
+      onAnimationEnd={onAnimationEnd}
+    >
       <div className="van-preview-stage">
         <div className="van-preview-scene">
           <img
@@ -64,6 +72,9 @@ export function VanPreviewStage({
   activeIndex,
   onChangeIndex,
   swipeDisabled = false,
+  frozen = false,
+  driving = false,
+  onDriveOffComplete,
 }: VanPreviewStageProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [outgoingPart, setOutgoingPart] = useState<VanPart | null>(null)
@@ -85,7 +96,7 @@ export function VanPreviewStage({
   activeIndexRef.current = activeIndex
 
   const activePart = parts[activeIndex] ?? parts[0]
-  const isCrossfading = outgoingPart !== null
+  const isCrossfading = outgoingPart !== null && !frozen
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -241,7 +252,11 @@ export function VanPreviewStage({
             />
           </>
         ) : (
-          <VanLayer part={activePart} className="van-preview-layer--current" />
+          <VanLayer
+            part={activePart}
+            className={`van-preview-layer--current${driving ? ' van-preview-layer--driving' : ''}`}
+            onAnimationEnd={driving ? onDriveOffComplete : undefined}
+          />
         )}
       </div>
     </div>

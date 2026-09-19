@@ -15,7 +15,8 @@ import {
   type StickerSet,
 } from './data/stickers'
 import { type VanPart } from './data/vanParts'
-import { AutoShopContent, garageBackground } from './auto-shop/AutoShopContent'
+import { AutoShopContent } from './auto-shop/AutoShopContent'
+import { preloadAutoShopAssets } from './auto-shop/autoShopAssets'
 import { saveEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
@@ -1205,8 +1206,6 @@ function App() {
     const savedId = sessionStorage.getItem('selectedStickerId')
     return getStickerById(savedId ?? '')?.id ?? 'hike'
   })
-  const [confirmedPart, setConfirmedPart] = useState<VanPart | null>(null)
-  const [isConfirming, setIsConfirming] = useState(false)
   const [stage, setStage] = useState<TransitionStage>('idle')
   const [overlayRects, setOverlayRects] = useState<{ source: StickerRect; target: StickerRect } | null>(null)
   const sourceStickerRef = useRef<HTMLImageElement | null>(null)
@@ -1221,6 +1220,10 @@ function App() {
 
   useEffect(() => {
     return () => timers.current.forEach((timer) => window.clearTimeout(timer))
+  }, [])
+
+  useEffect(() => {
+    void preloadAutoShopAssets()
   }, [])
 
   useEffect(() => {
@@ -1280,7 +1283,6 @@ function App() {
 
   const handleMapArrived = () => {
     setStandReached(true)
-    setIsConfirming(false)
     setScreen('selection')
     // Next frame so the sheet mounts off-screen before sliding up.
     window.requestAnimationFrame(() => setSheetOpen(true))
@@ -1289,20 +1291,17 @@ function App() {
   const handleStandTap = () => {
     if (sheetOpen || screen === 'selection') return
     setStandReached(true)
-    setIsConfirming(false)
     setScreen('selection')
     window.requestAnimationFrame(() => setSheetOpen(true))
   }
 
   const handleSaveForLater = () => {
-    if (isConfirming) return
     timers.current.forEach((timer) => window.clearTimeout(timer))
     timers.current = []
     setStage('idle')
     setOverlayRects(null)
     setSheetOpen(false)
     setSheetReady(false)
-    setIsConfirming(false)
     setStandReached(true)
     setScreen('map')
   }
@@ -1317,7 +1316,6 @@ function App() {
 
   const handleDriveOffComplete = () => {
     setStandReached(true)
-    setIsConfirming(false)
     setScreen('map')
   }
 
@@ -1325,10 +1323,7 @@ function App() {
     setScreen('placement')
   }
 
-  const handleAddToVan = (part: VanPart) => {
-    if (isConfirming) return
-    setIsConfirming(true)
-    setConfirmedPart(part)
+  const handleAutoShopFinished = (part: VanPart) => {
     saveEquippedPart(part)
     setSheetOpen(false)
     setSheetReady(false)
@@ -1381,19 +1376,10 @@ function App() {
             className={`selection-sheet${sheetOpen ? ' selection-sheet--open' : ''}`}
           >
             {autoShopMode ? (
-              sheetReady ? (
-                <AutoShopContent
-                  onAddToVan={handleAddToVan}
-                  onClose={handleSaveForLater}
-                  isConfirming={isConfirming}
-                />
-              ) : (
-                <div
-                  className={`selection-screen selection-screen--sheet${sheetOpen ? ' selection-screen--sheet-open' : ''} auto-shop-sheet-placeholder`}
-                  style={{ backgroundImage: `url(${garageBackground})` }}
-                  aria-hidden
-                />
-              )
+              <AutoShopContent
+                onFinish={handleAutoShopFinished}
+                onClose={handleSaveForLater}
+              />
             ) : (
               <StickerSelectionScreen
                 asSheet
@@ -1427,7 +1413,7 @@ function App() {
         {screen === 'driveOff' ? (
           <DriveOffScreen
             sticker={autoShopMode ? undefined : selectedSticker}
-            accessory={autoShopMode ? confirmedPart : null}
+            accessory={null}
             onComplete={handleDriveOffComplete}
             onChangePlacement={autoShopMode ? undefined : handleChangePlacement}
           />
