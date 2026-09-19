@@ -218,9 +218,9 @@ export function VanPreviewStage({
     const current = activeIndexRef.current
     let next = current
     if (dx <= -SWIPE_THRESHOLD_PX || (flicked && velocityX.current < -SWIPE_VELOCITY)) {
-      next = Math.min(parts.length - 1, current + 1)
+      next = (current + 1) % parts.length
     } else if (dx >= SWIPE_THRESHOLD_PX || (flicked && velocityX.current > SWIPE_VELOCITY)) {
-      next = Math.max(0, current - 1)
+      next = (current - 1 + parts.length) % parts.length
     }
     dragDxRef.current = 0
     if (next !== current) beginTransition(next, true)
