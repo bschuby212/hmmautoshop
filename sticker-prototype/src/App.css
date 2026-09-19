@@ -370,6 +370,34 @@
   user-select: none;
   -webkit-user-drag: none;
 }
+.map-shop-art {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: -54px;
+  width: 393px;
+  height: 906px;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 4px rgba(20, 65, 48, 0.2));
+}
+.map-shop-art img {
+  display: block;
+  width: 393px;
+  height: 906px;
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  clip-path: polygon(
+    48% 31%,
+    68% 31%,
+    68% 34%,
+    75% 36%,
+    79% 45%,
+    46% 46%,
+    44% 35%,
+    48% 34%
+  );
+}
 .map-header {
   position: absolute;
   z-index: 5;

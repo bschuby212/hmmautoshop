@@ -220,6 +220,9 @@ function MapScreen({
   return (
     <section className="map-screen" aria-label="Mind map">
       <img className="map-art" src={mapArt} alt="" draggable={false} />
+      <div className="map-shop-art" aria-hidden>
+        <img src={mapArt} alt="" draggable={false} />
+      </div>
       <img
         className="map-van"
         src={mapVanArt}
