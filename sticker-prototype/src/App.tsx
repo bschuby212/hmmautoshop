@@ -14,8 +14,8 @@ import {
   type AppScreen,
   type StickerSet,
 } from './data/stickers'
-import { type VanPart } from './data/vanParts'
-import { AutoShopContent, garageBackground } from './auto-shop/AutoShopContent'
+import { type VanPart, vanParts } from './data/vanParts'
+import { AutoShopContent, garageBackground, autoShopSign } from './auto-shop/AutoShopContent'
 import { saveEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
@@ -23,7 +23,7 @@ import mapArt from './assets/map/map.png'
 import mapVanArt from './assets/map/map-van.png'
 import backChevron from './assets/map/back-chevron.svg'
 import westFallsBanner from './assets/selection/west-falls-banner.png'
-import driveOffCoast from './assets/drive-off/coast.png'
+import driveOffCoast from './assets/drive-off/coast.jpg'
 import driveOffVan from './assets/drive-off/side-van.png'
 import './App.css'
 
@@ -102,7 +102,7 @@ const MAP_VAN_PATH = [
   { x: 123, y: 366 },
   { x: 119, y: 340 },
 ]
-const MAP_DRIVE_MS = 5200
+const MAP_DRIVE_MS = 3200
 /** Top-down sprite nose points roughly top-left at rest (~-135°). */
 const MAP_VAN_HEADING_OFFSET = 135
 
@@ -1025,18 +1025,20 @@ function PlaceStickerScreen({
   )
 }
 
-const DRIVE_OFF_DURATION_MS = 2800
+const DRIVE_OFF_DURATION_MS = 3400
 
 function DriveOffScreen({
   sticker,
   accessory,
   onComplete,
   onChangePlacement,
+  onChangeAccessory,
 }: {
   sticker?: StickerSet
   accessory?: VanPart | null
   onComplete: () => void
   onChangePlacement?: () => void
+  onChangeAccessory?: () => void
 }) {
   const [driving, setDriving] = useState(false)
   const stickerPercent = accessory
@@ -1058,9 +1060,11 @@ function DriveOffScreen({
   return (
     <div className="drive-off-screen" aria-label="Van driving off">
       <img className="drive-off-coast" src={driveOffCoast} alt="" draggable={false} />
-      <div className={`drive-off-van-wrap${driving ? ' drive-off-van-wrap--driving' : ''}`}>
+      <div
+        className={`drive-off-van-wrap${accessory ? ' drive-off-van-wrap--composite' : ''}${driving ? ' drive-off-van-wrap--driving' : ''}`}
+      >
         <img
-          className="drive-off-van"
+          className={`drive-off-van${accessory ? ' drive-off-van--composite' : ''}`}
           src={accessory?.vanSrc ?? driveOffVan}
           alt=""
           draggable={false}
@@ -1084,7 +1088,15 @@ function DriveOffScreen({
           >
             Continue
           </button>
-          {onChangePlacement && !accessory ? (
+          {onChangeAccessory ? (
+            <button
+              type="button"
+              className="save-for-later-button"
+              onClick={onChangeAccessory}
+            >
+              Change accessory
+            </button>
+          ) : onChangePlacement ? (
             <button
               type="button"
               className="save-for-later-button"
@@ -1223,9 +1235,27 @@ function App() {
     return () => timers.current.forEach((timer) => window.clearTimeout(timer))
   }, [])
 
+  // Decode Auto Shop art during map so the sheet opens as one composition.
+  useEffect(() => {
+    const urls = [
+      garageBackground,
+      autoShopSign,
+      ...vanParts.map((part) => part.shopSrc),
+    ]
+    for (const url of urls) {
+      const image = new Image()
+      image.src = url
+    }
+  }, [])
+
   useEffect(() => {
     if (!sheetOpen) {
       setSheetReady(false)
+      return
+    }
+    // Sticker-mode package deal still waits for sheet settle; Auto Shop mounts immediately.
+    if (autoShopMode) {
+      setSheetReady(true)
       return
     }
     const sheet = sheetRef.current
@@ -1248,14 +1278,14 @@ function App() {
 
     sheet.addEventListener('transitionend', onTransitionEnd)
     // Fallback if transitionend is skipped (e.g. reduced motion / already open).
-    const fallbackTimer = window.setTimeout(markReady, 900)
+    const fallbackTimer = window.setTimeout(markReady, 600)
 
     return () => {
       sheet.removeEventListener('transitionend', onTransitionEnd)
       window.clearTimeout(fallbackTimer)
       if (settleTimer) window.clearTimeout(settleTimer)
     }
-  }, [sheetOpen])
+  }, [sheetOpen, autoShopMode])
 
   // Measured before paint so the overlay is already sitting on the package
   // sticker for the first frame of the lift. The target is re-measured once the
@@ -1325,6 +1355,13 @@ function App() {
     setScreen('placement')
   }
 
+  const handleChangeAccessory = () => {
+    setIsConfirming(false)
+    setConfirmedPart(null)
+    setScreen('selection')
+    window.requestAnimationFrame(() => setSheetOpen(true))
+  }
+
   const handleAddToVan = (part: VanPart) => {
     if (isConfirming) return
     setIsConfirming(true)
@@ -1381,19 +1418,11 @@ function App() {
             className={`selection-sheet${sheetOpen ? ' selection-sheet--open' : ''}`}
           >
             {autoShopMode ? (
-              sheetReady ? (
-                <AutoShopContent
-                  onAddToVan={handleAddToVan}
-                  onClose={handleSaveForLater}
-                  isConfirming={isConfirming}
-                />
-              ) : (
-                <div
-                  className={`selection-screen selection-screen--sheet${sheetOpen ? ' selection-screen--sheet-open' : ''} auto-shop-sheet-placeholder`}
-                  style={{ backgroundImage: `url(${garageBackground})` }}
-                  aria-hidden
-                />
-              )
+              <AutoShopContent
+                onAddToVan={handleAddToVan}
+                onClose={handleSaveForLater}
+                isConfirming={isConfirming}
+              />
             ) : (
               <StickerSelectionScreen
                 asSheet
@@ -1430,6 +1459,7 @@ function App() {
             accessory={autoShopMode ? confirmedPart : null}
             onComplete={handleDriveOffComplete}
             onChangePlacement={autoShopMode ? undefined : handleChangePlacement}
+            onChangeAccessory={autoShopMode ? handleChangeAccessory : undefined}
           />
         ) : null}
         {!autoShopMode ? (
