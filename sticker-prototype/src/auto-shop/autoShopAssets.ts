@@ -7,7 +7,7 @@ export { autoShopSign, garageBackground }
 const autoShopImageSources = [
   garageBackground,
   autoShopSign,
-  ...vanParts.map((part) => part.shopSrc),
+  ...vanParts.flatMap((part) => part.shopLayers.map((layer) => layer.src)),
 ]
 
 let preloadPromise: Promise<void> | null = null

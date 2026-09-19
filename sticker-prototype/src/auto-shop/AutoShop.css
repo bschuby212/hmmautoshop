@@ -147,12 +147,11 @@
 .van-preview-viewport {
   position: absolute;
   left: 0;
-  top: 186px;
-  /* Full Figma phone width so crop boxes (547 / 341 / 495) match 17547:4065. */
+  top: 242px;
   width: 393px;
   max-width: 393px;
-  height: 264px;
-  min-height: 340px;
+  height: 196px;
+  min-height: 196px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -175,8 +174,7 @@
 .van-preview-stack {
   position: relative;
   width: 393px;
-  /* Tall enough for kayak topPx 56 + height 198 within the bike 248 box. */
-  height: 264px;
+  height: 196px;
   flex-shrink: 0;
 }
 
@@ -218,11 +216,10 @@
 }
 
 .van-preview-stage {
-  /* Full 393px phone width so Figma crops (overflowing left/right) frame each part. */
   position: relative;
   width: 393px;
   max-width: none;
-  height: 264px;
+  height: 196px;
   backface-visibility: hidden;
   transform: translateZ(0);
   margin: 0;
@@ -232,8 +229,9 @@
 
 .van-preview-scene {
   position: relative;
-  width: 393px;
-  height: 264px;
+  width: 374px;
+  height: 196px;
+  margin: 0 auto;
   overflow: hidden;
 }
 

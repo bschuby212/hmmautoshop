@@ -5,7 +5,7 @@ import {
   type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from 'react'
-import { type VanPart } from '../data/vanParts'
+import { type VanPart, type VanPartShopLayer } from '../data/vanParts'
 
 const TRANSITION_MS = 480
 const SWIPE_THRESHOLD_PX = 56
@@ -22,16 +22,15 @@ type VanPreviewStageProps = {
   onDriveOffComplete?: () => void
 }
 
-function shopImageStyle(part: VanPart): CSSProperties {
-  const frame = part.shopFrame
+function shopImageStyle(layer: VanPartShopLayer): CSSProperties {
   return {
     position: 'absolute',
-    width: frame.widthPx,
-    height: frame.heightPx,
-    left: frame.leftPx,
-    top: frame.topPx ?? 0,
+    width: layer.widthPx,
+    height: layer.heightPx,
+    left: layer.leftPx,
+    top: layer.topPx,
     maxWidth: 'none',
-    objectFit: 'cover',
+    objectFit: 'contain',
   }
 }
 
@@ -50,14 +49,17 @@ function VanLayer({ part, className = '', onAnimationEnd }: LayerProps) {
     >
       <div className="van-preview-stage">
         <div className="van-preview-scene">
-          <img
-            className="van-preview-van"
-            src={part.shopSrc}
-            alt=""
-            draggable={false}
-            decoding="async"
-            style={shopImageStyle(part)}
-          />
+          {part.shopLayers.map((layer, index) => (
+            <img
+              key={layer.src}
+              className={`van-preview-van${index === 0 ? ' van-preview-van--base' : ' van-preview-van--accessory'}`}
+              src={layer.src}
+              alt=""
+              draggable={false}
+              decoding="async"
+              style={shopImageStyle(layer)}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -1,13 +1,11 @@
-import bikeRackPart from '../assets/auto-shop/parts/bike-rack.png'
-import kayakPart from '../assets/auto-shop/parts/kayak.png'
-import eyelashesPart from '../assets/auto-shop/parts/eyelashes.png'
 import baseVan from '../assets/auto-shop/van/base-van.png'
 import bikeRackVan from '../assets/auto-shop/van/bike-rack.png'
 import kayakVan from '../assets/auto-shop/van/kayak.png'
 import eyelashesVan from '../assets/auto-shop/van/eyelashes.png'
-import shopBikeRack from '../assets/auto-shop/van/shop-bike-rack.png'
-import shopKayak from '../assets/auto-shop/van/shop-kayak.png'
-import shopEyelashes from '../assets/auto-shop/van/shop-eyelashes.png'
+import fixedBaseVan from '../assets/auto-shop/van/fixed-base.png'
+import fixedBikeRack from '../assets/auto-shop/van/fixed-bike-rack.png'
+import fixedKayak from '../assets/auto-shop/van/fixed-kayak.png'
+import fixedEyelashes from '../assets/auto-shop/van/fixed-eyelashes.png'
 
 export type VanPartCamera = {
   /** Kept for timing hooks; always leave scale at 1 with no pan. */
@@ -22,11 +20,12 @@ export type VanPartCamera = {
  * Figma shop crop on a 393px phone — absolute px, not % of a padded parent.
  * Image fills the box with object-fit: cover.
  */
-export type VanPartShopFrame = {
+export type VanPartShopLayer = {
+  src: string
   widthPx: number
   leftPx: number
   heightPx: number
-  topPx?: number
+  topPx: number
 }
 
 /**
@@ -39,10 +38,8 @@ export type VanPart = {
   description: string
   /** Isolated part art for product shots. */
   partSrc: string
-  /** Auto Shop swipe preview (Figma angle/crop art). */
-  shopSrc: string
-  /** Framing for shopSrc inside the 393px phone stage. */
-  shopFrame: VanPartShopFrame
+  /** Fixed Figma layers on a shared 374×196 canvas. */
+  shopLayers: VanPartShopLayer[]
   /** Full van + part composite for equipped beach drive-off. */
   vanSrc: string
   camera: VanPartCamera
@@ -59,21 +56,30 @@ const stillCamera: VanPartCamera = {
   duration: 480,
 }
 
-/**
- * Exact Figma 17547:4065 boxes (phone 393px):
- * - bike rack: left 63 / top 280 / 547×248
- * - kayak:     left 25 / top 336 / 341×198
- * - eyelashes: left -174 / top 296 / 495×248
- * topPx is relative to the bike-rack baseline (280).
- */
+const fixedBaseLayer: VanPartShopLayer = {
+  src: fixedBaseVan,
+  leftPx: 36,
+  topPx: 26.69,
+  widthPx: 337.59,
+  heightPx: 169.29,
+}
+
 export const vanParts: VanPart[] = [
   {
     id: 'bike-rack',
     name: 'Bike rack',
     description: 'Rear hitch mount that carries two bikes for the trail.',
-    partSrc: bikeRackPart,
-    shopSrc: shopBikeRack,
-    shopFrame: { widthPx: 547, leftPx: 63, heightPx: 248, topPx: 0 },
+    partSrc: fixedBikeRack,
+    shopLayers: [
+      fixedBaseLayer,
+      {
+        src: fixedBikeRack,
+        leftPx: 0,
+        topPx: 70.69,
+        widthPx: 60,
+        heightPx: 93,
+      },
+    ],
     vanSrc: bikeRackVan,
     camera: stillCamera,
   },
@@ -81,9 +87,17 @@ export const vanParts: VanPart[] = [
     id: 'kayak',
     name: 'Kayak',
     description: 'Roof straps that lock a kayak on for water days.',
-    partSrc: kayakPart,
-    shopSrc: shopKayak,
-    shopFrame: { widthPx: 341, leftPx: 25, heightPx: 198, topPx: 56 },
+    partSrc: fixedKayak,
+    shopLayers: [
+      fixedBaseLayer,
+      {
+        src: fixedKayak,
+        leftPx: 98.9,
+        topPx: 0,
+        widthPx: 216.19,
+        heightPx: 56.62,
+      },
+    ],
     vanSrc: kayakVan,
     camera: stillCamera,
   },
@@ -91,9 +105,17 @@ export const vanParts: VanPart[] = [
     id: 'eyelashes',
     name: 'Eyelashes',
     description: 'Headlight decals that give the van a little personality.',
-    partSrc: eyelashesPart,
-    shopSrc: shopEyelashes,
-    shopFrame: { widthPx: 495, leftPx: -174, heightPx: 248, topPx: 16 },
+    partSrc: fixedEyelashes,
+    shopLayers: [
+      fixedBaseLayer,
+      {
+        src: fixedEyelashes,
+        leftPx: 343,
+        topPx: 102.69,
+        widthPx: 28,
+        heightPx: 22,
+      },
+    ],
     vanSrc: eyelashesVan,
     camera: stillCamera,
   },
