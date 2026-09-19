@@ -83,12 +83,15 @@ export function AutoShopContent({
         <div className={`auto-shop-footer${isDriving ? ' auto-shop-footer--driving' : ''}`}>
           <div className="auto-shop-footer-scrim" aria-hidden="true" />
           <div className="auto-shop-footer-content">
-            <PartDots
-              total={total}
-              activeIndex={activePartIndex}
-              onSelect={goToIndex}
-              disabled={!isSelecting}
-            />
+            {isSelecting ? (
+              <PartDots
+                total={total}
+                activeIndex={activePartIndex}
+                onSelect={goToIndex}
+              />
+            ) : (
+              <div className="part-dots" aria-hidden />
+            )}
 
             <PartNavigation
               partName={displayedPart.name}
