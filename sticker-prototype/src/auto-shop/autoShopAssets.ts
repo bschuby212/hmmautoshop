@@ -7,7 +7,7 @@ export { autoShopSign, garageBackground }
 const autoShopImageSources = [
   garageBackground,
   autoShopSign,
-  ...vanParts.flatMap((part) => [part.shopSrc, part.vanSrc]),
+  ...vanParts.map((part) => part.shopSrc),
 ]
 
 let preloadPromise: Promise<void> | null = null
@@ -16,8 +16,11 @@ function decodeImage(src: string) {
   return new Promise<void>((resolve) => {
     const image = new Image()
     image.decoding = 'async'
+    let settled = false
 
     const finish = () => {
+      if (settled) return
+      settled = true
       if (typeof image.decode !== 'function') {
         resolve()
         return

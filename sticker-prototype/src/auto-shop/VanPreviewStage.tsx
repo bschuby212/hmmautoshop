@@ -55,6 +55,7 @@ function VanLayer({ part, className = '', onAnimationEnd }: LayerProps) {
             src={part.shopSrc}
             alt=""
             draggable={false}
+            decoding="async"
             style={shopImageStyle(part)}
           />
         </div>

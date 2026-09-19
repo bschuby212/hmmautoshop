@@ -1329,7 +1329,8 @@ function App() {
     setSheetReady(false)
     setStage('idle')
     setOverlayRects(null)
-    setScreen('driveOff')
+    setStandReached(true)
+    setScreen('map')
   }
 
   const handleSelectSticker = () => {
