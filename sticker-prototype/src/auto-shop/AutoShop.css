@@ -404,9 +404,9 @@
 }
 
 .auto-shop-change {
-  border: 2px solid #765cd8;
+  border: 2px solid #ffffff;
   background: rgba(12, 8, 18, 0.18);
-  color: #a993ff;
+  color: #ffffff;
 }
 
 .add-to-van-button:hover:not(:disabled),
@@ -415,7 +415,7 @@
 }
 
 .auto-shop-change:hover:not(:disabled) {
-  background: rgba(118, 92, 216, 0.14);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .add-to-van-button:focus-visible,
