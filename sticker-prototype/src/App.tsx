@@ -23,7 +23,7 @@ import mapArt from './assets/map/map.png'
 import mapVanArt from './assets/map/map-van.png'
 import backChevron from './assets/map/back-chevron.svg'
 import westFallsBanner from './assets/selection/west-falls-banner.png'
-import driveOffCoast from './assets/drive-off/coast.png'
+import driveOffCoast from './assets/drive-off/coast.jpg'
 import driveOffVan from './assets/drive-off/side-van.png'
 import './App.css'
 
@@ -102,7 +102,7 @@ const MAP_VAN_PATH = [
   { x: 123, y: 366 },
   { x: 119, y: 340 },
 ]
-const MAP_DRIVE_MS = 5200
+const MAP_DRIVE_MS = 3200
 /** Top-down sprite nose points roughly top-left at rest (~-135°). */
 const MAP_VAN_HEADING_OFFSET = 135
 
@@ -1278,7 +1278,7 @@ function App() {
 
     sheet.addEventListener('transitionend', onTransitionEnd)
     // Fallback if transitionend is skipped (e.g. reduced motion / already open).
-    const fallbackTimer = window.setTimeout(markReady, 900)
+    const fallbackTimer = window.setTimeout(markReady, 600)
 
     return () => {
       sheet.removeEventListener('transitionend', onTransitionEnd)
