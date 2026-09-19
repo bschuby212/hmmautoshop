@@ -268,9 +268,11 @@ function MapScreen({
 
 function IPhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <section className="phone-frame" aria-label="iPhone 15 Pro prototype">
-      <div className="phone-screen">{children}</div>
-    </section>
+    <div className="phone-frame-slot">
+      <section className="phone-frame" aria-label="iPhone 15 Pro prototype">
+        <div className="phone-screen">{children}</div>
+      </section>
+    </div>
   )
 }
 

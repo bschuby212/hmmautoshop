@@ -1,6 +1,21 @@
-.desktop-shell { min-height: 100svh; display: grid; place-items: center; overflow: hidden; background: #29292d; padding: 18px; }
+.desktop-shell {
+  --phone-scale: min(100vw / 409px, 100svh / 868px);
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #29292d;
+  padding: 0;
+}
+.phone-frame-slot {
+  width: calc(409px * var(--phone-scale));
+  height: calc(868px * var(--phone-scale));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
 .phone-frame {
-  --phone-scale: min(1, (100svh - 36px) / 868px, (100vw - 36px) / 409px);
   width: 409px;
   height: 868px;
   padding: 8px;
@@ -396,7 +411,7 @@
   align-items: flex-start;
   justify-content: space-between;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #063235;
