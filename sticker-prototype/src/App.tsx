@@ -17,7 +17,7 @@ import {
 import { type VanPart } from './data/vanParts'
 import { AutoShopContent } from './auto-shop/AutoShopContent'
 import { preloadAutoShopAssets } from './auto-shop/autoShopAssets'
-import { saveEquippedPart } from './auto-shop/equippedPartStorage'
+import { saveEquippedPart, clearEquippedPart } from './auto-shop/equippedPartStorage'
 import campground from './assets/placement/campground.png'
 import vanArt from './assets/placement/van.png'
 import mapArt from './assets/map/map.png'
@@ -1216,6 +1216,7 @@ function App() {
     const savedId = sessionStorage.getItem('selectedStickerId')
     return getStickerById(savedId ?? '')?.id ?? 'hike'
   })
+  const [experienceKey, setExperienceKey] = useState(0)
   const [stage, setStage] = useState<TransitionStage>('idle')
   const [overlayRects, setOverlayRects] = useState<{ source: StickerRect; target: StickerRect } | null>(null)
   const sourceStickerRef = useRef<HTMLImageElement | null>(null)
@@ -1343,6 +1344,20 @@ function App() {
     setScreen('map')
   }
 
+  const handleResetExperience = () => {
+    timers.current.forEach((timer) => window.clearTimeout(timer))
+    timers.current = []
+    clearEquippedPart()
+    setScreen('map')
+    setSheetOpen(false)
+    setSheetReady(false)
+    setStandReached(false)
+    setActiveIndex(0)
+    setStage('idle')
+    setOverlayRects(null)
+    setExperienceKey((current) => current + 1)
+  }
+
   const handleSelectSticker = () => {
     if (isTransitioning) return
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -1372,72 +1387,87 @@ function App() {
 
   return (
     <div className="desktop-shell">
-      <IPhoneFrame>
-        {showMap ? (
-          <MapScreen
-            dimmed={showSelection && sheetOpen}
-            skipDrive={standReached}
-            onArrived={handleMapArrived}
-            onStandTap={handleStandTap}
-          />
-        ) : null}
-        {showSelection ? (
-          <div
-            ref={sheetRef}
-            className={`selection-sheet${sheetOpen ? ' selection-sheet--open' : ''}`}
-          >
-            {autoShopMode ? (
-              <AutoShopContent
-                onFinish={handleAutoShopFinished}
-                onClose={handleSaveForLater}
-              />
-            ) : (
-              <StickerSelectionScreen
-                asSheet
-                sheetOpen={sheetOpen}
-                sheetReady={sheetReady}
-                activeIndex={activeIndex}
-                onChange={setActiveIndex}
-                onSelectSticker={handleSelectSticker}
-                onSaveForLater={handleSaveForLater}
-                activeStickerRef={(element) => {
-                  sourceStickerRef.current = element
-                }}
-                isTransitioning={isTransitioning}
-                transitionStage={stage}
-              />
-            )}
-          </div>
-        ) : null}
-        {!autoShopMode && (screen === 'placement' || isTransitioning) ? (
-          <PlaceStickerScreen
-            key={`${selectedStickerId}-placement`}
-            sticker={selectedSticker}
-            stickerRef={(element) => {
-              targetStickerRef.current = element
-            }}
-            isTransitioning={isTransitioning}
-            transitionStage={stage}
-            onContinue={handleContinueToDriveOff}
-          />
-        ) : null}
-        {screen === 'driveOff' ? (
-          <DriveOffScreen
-            sticker={autoShopMode ? undefined : selectedSticker}
-            accessory={null}
-            onComplete={handleDriveOffComplete}
-            onChangePlacement={autoShopMode ? undefined : handleChangePlacement}
-          />
-        ) : null}
-        {!autoShopMode ? (
-          <StickerTransitionOverlay
-            sticker={selectedSticker}
-            source={overlayRects?.source ?? null}
-            target={overlayRects?.target ?? null}
-            stage={stage}
-          />
-        ) : null}
-      </IPhoneFrame>
+      <div className="phone-stage">
+        <IPhoneFrame key={experienceKey}>
+          {showMap ? (
+            <MapScreen
+              dimmed={showSelection && sheetOpen}
+              skipDrive={standReached}
+              onArrived={handleMapArrived}
+              onStandTap={handleStandTap}
+            />
+          ) : null}
+          {showSelection ? (
+            <div
+              ref={sheetRef}
+              className={`selection-sheet${sheetOpen ? ' selection-sheet--open' : ''}`}
+            >
+              {autoShopMode ? (
+                <AutoShopContent
+                  onFinish={handleAutoShopFinished}
+                  onClose={handleSaveForLater}
+                />
+              ) : (
+                <StickerSelectionScreen
+                  asSheet
+                  sheetOpen={sheetOpen}
+                  sheetReady={sheetReady}
+                  activeIndex={activeIndex}
+                  onChange={setActiveIndex}
+                  onSelectSticker={handleSelectSticker}
+                  onSaveForLater={handleSaveForLater}
+                  activeStickerRef={(element) => {
+                    sourceStickerRef.current = element
+                  }}
+                  isTransitioning={isTransitioning}
+                  transitionStage={stage}
+                />
+              )}
+            </div>
+          ) : null}
+          {!autoShopMode && (screen === 'placement' || isTransitioning) ? (
+            <PlaceStickerScreen
+              key={`${selectedStickerId}-placement`}
+              sticker={selectedSticker}
+              stickerRef={(element) => {
+                targetStickerRef.current = element
+              }}
+              isTransitioning={isTransitioning}
+              transitionStage={stage}
+              onContinue={handleContinueToDriveOff}
+            />
+          ) : null}
+          {screen === 'driveOff' ? (
+            <DriveOffScreen
+              sticker={autoShopMode ? undefined : selectedSticker}
+              accessory={null}
+              onComplete={handleDriveOffComplete}
+              onChangePlacement={autoShopMode ? undefined : handleChangePlacement}
+            />
+          ) : null}
+          {!autoShopMode ? (
+            <StickerTransitionOverlay
+              sticker={selectedSticker}
+              source={overlayRects?.source ?? null}
+              target={overlayRects?.target ?? null}
+              stage={stage}
+            />
+          ) : null}
+        </IPhoneFrame>
+        <button
+          type="button"
+          className="mock-reset"
+          aria-label="Reset experience"
+          onClick={handleResetExperience}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }

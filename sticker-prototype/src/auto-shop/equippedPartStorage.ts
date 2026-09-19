@@ -28,3 +28,11 @@ export function readEquippedPart(): VanPart | null {
 export function saveEquippedPart(part: VanPart) {
   writeEquippedPartId(part.id)
 }
+
+export function clearEquippedPart() {
+  try {
+    sessionStorage.removeItem(EQUIPPED_PART_KEY)
+  } catch {
+    // Ignore private-mode failures; UI still resets for the session.
+  }
+}
