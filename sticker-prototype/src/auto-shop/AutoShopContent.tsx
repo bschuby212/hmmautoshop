@@ -116,7 +116,7 @@ export function AutoShopContent({
                     onClick={handleFinish}
                     disabled={isDriving}
                   >
-                    Finish
+                    Confirm
                   </button>
                   <button
                     type="button"
@@ -124,7 +124,7 @@ export function AutoShopContent({
                     onClick={handleChange}
                     disabled={isDriving}
                   >
-                    Change
+                    Change Car Part
                   </button>
                 </>
               )}
