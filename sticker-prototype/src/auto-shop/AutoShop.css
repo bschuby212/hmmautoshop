@@ -18,7 +18,7 @@
   position: absolute;
   z-index: 0;
   left: -14px;
-  top: -40px;
+  top: -60px;
   width: 423px;
   height: 940px;
   max-width: none;
@@ -31,7 +31,7 @@
 .auto-shop-sheet-placeholder {
   background-color: #c4b49a;
   background-size: 423px 940px;
-  background-position: -14px -40px;
+  background-position: -14px -60px;
   background-repeat: no-repeat;
 }
 
@@ -147,7 +147,7 @@
 .van-preview-viewport {
   position: absolute;
   left: 0;
-  top: 204px;
+  top: 186px;
   /* Full Figma phone width so crop boxes (547 / 341 / 495) match 17547:4065. */
   width: 393px;
   max-width: 393px;

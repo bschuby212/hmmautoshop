@@ -1,4 +1,4 @@
-import garageBackground from '../assets/auto-shop/garage-bg.jpg'
+import garageBackground from '../assets/auto-shop/garage-sheet-bg.png'
 import autoShopSign from '../assets/auto-shop/auto-shop-sign.png'
 import { vanParts } from '../data/vanParts'
 
