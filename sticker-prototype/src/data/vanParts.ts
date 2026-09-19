@@ -38,7 +38,7 @@ export type VanPart = {
   description: string
   /** Isolated part art for product shots. */
   partSrc: string
-  /** Fixed Figma layers on a shared 374×196 canvas. */
+  /** Fixed Figma layers on a shared 393×188 canvas. */
   shopLayers: VanPartShopLayer[]
   /** Full van + part composite for equipped beach drive-off. */
   vanSrc: string
@@ -58,10 +58,10 @@ const stillCamera: VanPartCamera = {
 
 const fixedBaseLayer: VanPartShopLayer = {
   src: fixedBaseVan,
-  leftPx: 36,
-  topPx: 26.69,
-  widthPx: 337.59,
-  heightPx: 169.29,
+  leftPx: 34.7,
+  topPx: 25.58,
+  widthPx: 323.59,
+  heightPx: 162.27,
 }
 
 export const vanParts: VanPart[] = [
@@ -75,9 +75,9 @@ export const vanParts: VanPart[] = [
       {
         src: fixedBikeRack,
         leftPx: 0,
-        topPx: 70.69,
-        widthPx: 60,
-        heightPx: 93,
+        topPx: 67.76,
+        widthPx: 57.51,
+        heightPx: 89.14,
       },
     ],
     vanSrc: bikeRackVan,
@@ -92,10 +92,10 @@ export const vanParts: VanPart[] = [
       fixedBaseLayer,
       {
         src: fixedKayak,
-        leftPx: 98.9,
+        leftPx: 94.97,
         topPx: 0,
-        widthPx: 216.19,
-        heightPx: 56.62,
+        widthPx: 207.23,
+        heightPx: 54.27,
       },
     ],
     vanSrc: kayakVan,
@@ -110,10 +110,10 @@ export const vanParts: VanPart[] = [
       fixedBaseLayer,
       {
         src: fixedEyelashes,
-        leftPx: 343,
-        topPx: 102.69,
-        widthPx: 28,
-        heightPx: 22,
+        leftPx: 328.78,
+        topPx: 98.43,
+        widthPx: 26.84,
+        heightPx: 21.09,
       },
     ],
     vanSrc: eyelashesVan,
